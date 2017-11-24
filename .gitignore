@@ -1,5 +1,8 @@
 target/
 !.mvn/wrapper/maven-wrapper.jar
+!.mvn
+!mvnw
+!mvnw.cmd
 
 ### STS ###
 .apt_generated
@@ -22,3 +25,9 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+.mvn/
+mvnw
+mvnw.cmd
+src/main/java/com/simplevoting/menuvoting/model/
+src/main/resources/static/
+src/main/resources/templates/
