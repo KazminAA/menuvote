@@ -10,7 +10,7 @@ CREATE SEQUENCE global_seq START 100000;
 
 CREATE TABLE users
 (
-  id               INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
+  id               INTEGER DEFAULT global_seq.nextval PRIMARY KEY,
   name             VARCHAR                 NOT NULL,
   email            VARCHAR                 NOT NULL,
   password         VARCHAR                 NOT NULL,
@@ -31,38 +31,38 @@ CREATE TABLE user_roles
 
 CREATE TABLE restaurants
 (
-  id   INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
+  id   INTEGER DEFAULT global_seq.nextval PRIMARY KEY,
   name VARCHAR NOT NULL
 );
 CREATE UNIQUE INDEX restaurant_menu_idx
-  ON restaurant (name);
+  ON restaurants (name);
 
 CREATE TABLE menus
 (
-  id            INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
+  id            INTEGER DEFAULT global_seq.nextval PRIMARY KEY,
   date          DATE DEFAULT now() NOT NULL,
-  curvotenum    INTEGER             DEFAULT 0,
+  curvotenum    INTEGER DEFAULT 0,
   restaurant_id INTEGER            NOT NULL,
-  FOREIGN KEY (restaurant_id) REFERENCES restaurant (id) ON DELETE CASCADE
+  FOREIGN KEY (restaurant_id) REFERENCES restaurants (id) ON DELETE CASCADE
 );
-CREATE UNIQUE INDEX menu_date_idx
-  ON menu (date);
+CREATE UNIQUE INDEX menu_date_restaurant_idx
+  ON menus (date, restaurant_id);
 
 CREATE TABLE menulists
 (
-  id      INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
+  id      INTEGER DEFAULT global_seq.nextval PRIMARY KEY,
   dish    VARCHAR NOT NULL,
   price   NUMERIC(10, 4),
   menu_id INTEGER NOT NULL,
-  FOREIGN KEY (menu_id) REFERENCES menu (id) ON DELETE CASCADE
+  FOREIGN KEY (menu_id) REFERENCES menus (id) ON DELETE CASCADE
 );
 
 CREATE TABLE votes
 (
-  datetime TIMESTAMP DEFAULT now() NOT NULL,
-  user_id  INTEGER                 NOT NULL,
-  menu_id  INTEGER                 NOT NULL,
-  CONSTRAINT datetine_iser_idx UNIQUE (datetime, user_id),
+  date    DATE DEFAULT now() NOT NULL,
+  user_id INTEGER            NOT NULL,
+  menu_id INTEGER            NOT NULL,
+  CONSTRAINT date_user_idx UNIQUE (date, user_id),
   FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
   FOREIGN KEY (menu_id) REFERENCES menus (id) ON DELETE CASCADE
 )
