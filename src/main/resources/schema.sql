@@ -16,7 +16,6 @@ CREATE TABLE users
   password         VARCHAR                 NOT NULL,
   registered       TIMESTAMP DEFAULT now() NOT NULL,
   enabled          BOOL DEFAULT TRUE       NOT NULL,
-  calories_per_day INTEGER DEFAULT 2000    NOT NULL
 );
 CREATE UNIQUE INDEX users_unique_email_idx
   ON users (email);
@@ -50,9 +49,9 @@ CREATE UNIQUE INDEX menu_date_restaurant_idx
 
 CREATE TABLE menulists
 (
-  id      INTEGER DEFAULT global_seq.nextval PRIMARY KEY,
+  id      INTEGER        DEFAULT global_seq.nextval PRIMARY KEY,
   dish    VARCHAR NOT NULL,
-  price   NUMERIC(10, 4),
+  price   NUMERIC(10, 4) DEFAULT 0.0,
   menu_id INTEGER NOT NULL,
   FOREIGN KEY (menu_id) REFERENCES menus (id) ON DELETE CASCADE
 );

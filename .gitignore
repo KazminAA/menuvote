@@ -28,6 +28,5 @@ nbdist/
 .mvn/
 mvnw
 mvnw.cmd
-src/main/java/com/simplevoting/menuvoting/model/
 src/main/resources/static/
 src/main/resources/templates/
