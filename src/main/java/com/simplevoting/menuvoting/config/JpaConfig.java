@@ -1,6 +1,7 @@
 package com.simplevoting.menuvoting.config;
 
-import org.apache.commons.dbcp2.BasicDataSource;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -31,15 +32,22 @@ public class JpaConfig {
 
     @Bean(destroyMethod = "close")
     public DataSource getDataSource() {
-        BasicDataSource dataSource = new BasicDataSource();
+        HikariConfig config = new HikariConfig();
 
-        dataSource.setDriverClassName(env.getRequiredProperty("spring.datasource.driverClassName"));
-        dataSource.setUrl(env.getRequiredProperty("spring.datasource.url"));
-        dataSource.setUsername(env.getRequiredProperty("spring.datasource.username"));
-        dataSource.setPassword(env.getRequiredProperty("spring.datasource.password"));
-        dataSource.setInitialSize(3);
-        dataSource.setMinIdle(2);
-        dataSource.setMaxIdle(6);
+        config.setDriverClassName(env.getRequiredProperty("spring.datasource.driver-class-name"));
+        config.setJdbcUrl(env.getRequiredProperty("spring.datasource.jdbcUrl"));
+        config.setUsername(env.getRequiredProperty("spring.datasource.username"));
+        config.setPassword(env.getRequiredProperty("spring.datasource.password"));
+        config.setMaximumPoolSize(Integer.parseInt(env.getRequiredProperty("spring.datasource.maximum-pool-size")));
+
+        config.addDataSourceProperty("dataSource.cachePrepStmts", "true");
+        config.addDataSourceProperty("dataSource.prepStmtCacheSize", "250");
+        config.addDataSourceProperty("dataSource.prepStmtCacheSqlLimit", "2048");
+        config.addDataSourceProperty("dataSource.useServerPrepStmts", true);
+        config.addDataSourceProperty("dataSource.useUnicode", "true");
+        config.addDataSourceProperty("dataSource.characterEncoding", "UTF-8");
+
+        HikariDataSource dataSource = new HikariDataSource(config);
 
         return dataSource;
     }
