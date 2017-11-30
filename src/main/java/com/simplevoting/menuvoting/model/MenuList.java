@@ -19,7 +19,7 @@ public class MenuList extends AbstractBaseEntity {
     @NotNull
     private BigInteger price = BigInteger.ZERO;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "menu_id", referencedColumnName = "id")
     private Menu menu;
 

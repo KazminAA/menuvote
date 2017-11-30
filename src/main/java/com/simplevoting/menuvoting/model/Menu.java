@@ -7,8 +7,7 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
-@Table(name = "menus", uniqueConstraints = {@UniqueConstraint(columnNames = "date", name = "menu_date_restaurant_idx"),
-        @UniqueConstraint(columnNames = "restaurant_id", name = "menu_date_restaurant_idx")})
+@Table(name = "menus", uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "restaurant_id"}, name = "menu_date_restaurant_idx")})
 public class Menu extends AbstractBaseEntity {
     @Column(name = "date", columnDefinition = "date default now()")
     @NotNull
