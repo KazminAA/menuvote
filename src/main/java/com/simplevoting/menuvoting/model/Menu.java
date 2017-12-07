@@ -2,16 +2,19 @@ package com.simplevoting.menuvoting.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Set;
 
 @Entity
 @Table(name = "menus", uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "restaurant_id"}, name = "menu_date_restaurant_idx")})
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = "menu_votes", attributeNodes = {@NamedAttributeNode(value = "votes")})
+})
 public class Menu extends AbstractBaseEntity {
     @Column(name = "date", columnDefinition = "date default now()")
     @NotNull
-    private Date date = new Date();
+    private LocalDate date = LocalDate.now();
 
     @Column(name = "curvotenum", columnDefinition = "default 0")
     @NotNull
@@ -24,21 +27,24 @@ public class Menu extends AbstractBaseEntity {
     @OneToMany(mappedBy = "menu")
     private Set<MenuList> menuList;
 
+    @OneToMany(mappedBy = "menu")
+    private Set<Vote> votes;
+
     public Menu() {
     }
 
-    public Menu(Integer id, Date date, Restaurant restaurant, Set<MenuList> menuList) {
+    public Menu(Integer id, LocalDate date, Restaurant restaurant, Set<MenuList> menuList) {
         super(id);
         this.date = date;
         this.restaurant = restaurant;
         this.menuList = menuList;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

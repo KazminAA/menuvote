@@ -12,6 +12,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = "user_votes", attributeNodes = {@NamedAttributeNode(value = "votes")})
+})
 public class User extends AbstractBaseEntity {
     @Column(name = "name", nullable = false)
     @NotBlank
@@ -42,6 +45,9 @@ public class User extends AbstractBaseEntity {
     @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Vote> votes;
 
     public User() {
     }
