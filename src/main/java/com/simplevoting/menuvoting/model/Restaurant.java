@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -15,6 +16,10 @@ public class Restaurant extends AbstractBaseEntity {
     @NotBlank
     @Size(min = 3, max = 100)
     private String name;
+
+    @Column(name = "address")
+    @Pattern(regexp = "[a-zа-я]{1,3}\\.[a-zA-Zа-яА-Я-]+\\,\\s\\d{1,3}")
+    private String address;
 
     public Restaurant() {
     }

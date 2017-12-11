@@ -12,10 +12,10 @@ INSERT INTO user_roles (role, user_id) VALUES
   ('ROLE_USER', 100001),
   ('ROLE_ADMIN', 100002);
 
-INSERT INTO restaurants (name) VALUES
-  ('Арчибальд'),
-  ('YellowSubmarine'),
-  ('Словянка');
+INSERT INTO restaurants (name, address) VALUES
+  ('Арчибальд', 'ул.Большая, 21'),
+  ('YellowSubmarine', 'ул.Никиты-Кожемяки, 33'),
+  ('Словянка', 'ул.Неокрашенная, 2');
 
 INSERT INTO menus (date, curvotenum, restaurant_id) VALUES
   ('2017-11-01', 1, 100004),

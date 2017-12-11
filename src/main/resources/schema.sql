@@ -31,7 +31,8 @@ CREATE TABLE user_roles
 CREATE TABLE restaurants
 (
   id   INTEGER DEFAULT global_seq.nextval PRIMARY KEY,
-  name VARCHAR NOT NULL
+  name VARCHAR NOT NULL,
+  address VARCHAR
 );
 CREATE UNIQUE INDEX restaurant_menu_idx
   ON restaurants (name);

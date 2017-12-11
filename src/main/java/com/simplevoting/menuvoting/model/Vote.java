@@ -1,53 +1,41 @@
 package com.simplevoting.menuvoting.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "votes", uniqueConstraints = {@UniqueConstraint(columnNames = "date, user_id", name = "date_user_idx")})
-@NamedEntityGraphs({
-        @NamedEntityGraph(name = "menu_votes_and_users", attributeNodes = {@NamedAttributeNode("users")}),
-        @NamedEntityGraph(name = "user_votes_and_menus", attributeNodes = {@NamedAttributeNode("menus")})
-})
+@Table(name = "votes", uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "user_id"}, name = "date_user_idx")})
 public class Vote {
-    @Column(name = "date")
-    @NotNull
-    private LocalDate date = LocalDate.now();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @NotNull
+    @EmbeddedId
+    VoteId id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", updatable = false, insertable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id", referencedColumnName = "id")
-    @NotNull
     private Menu menu;
 
     public Vote() {
     }
 
     public Vote(LocalDate date, User user, Menu menu) {
-        this.date = date;
-        this.user = user;
+        this.id = new VoteId(date, user.getId());
         this.menu = menu;
     }
 
     public LocalDate getDate() {
-        return date;
+        return id.getDate();
     }
 
     public void setDate(LocalDate date) {
-        this.date = date;
+        id.setDate(date);
     }
 
     public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+        return this.user;
     }
 
     public Menu getMenu() {
