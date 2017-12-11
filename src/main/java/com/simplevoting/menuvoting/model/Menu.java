@@ -72,6 +72,14 @@ public class Menu extends AbstractBaseEntity {
         this.restaurant = restaurant;
     }
 
+    public Set<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(Set<Vote> votes) {
+        this.votes = votes;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
