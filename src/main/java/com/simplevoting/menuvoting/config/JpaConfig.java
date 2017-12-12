@@ -32,28 +32,6 @@ public class JpaConfig {
         this.env = env;
     }
 
-    @Bean(destroyMethod = "close")
-    public DataSource getDataSource() {
-        HikariConfig config = new HikariConfig();
-
-        config.setDriverClassName(env.getRequiredProperty("spring.datasource.driver-class-name"));
-        config.setJdbcUrl(env.getRequiredProperty("spring.datasource.jdbcUrl"));
-        config.setUsername(env.getRequiredProperty("spring.datasource.username"));
-        config.setPassword(env.getRequiredProperty("spring.datasource.password"));
-        config.setMaximumPoolSize(Integer.parseInt(env.getRequiredProperty("spring.datasource.maximum-pool-size")));
-
-        config.addDataSourceProperty("dataSource.cachePrepStmts", "true");
-        config.addDataSourceProperty("dataSource.prepStmtCacheSize", "250");
-        config.addDataSourceProperty("dataSource.prepStmtCacheSqlLimit", "2048");
-        config.addDataSourceProperty("dataSource.useServerPrepStmts", true);
-        config.addDataSourceProperty("dataSource.useUnicode", "true");
-        config.addDataSourceProperty("dataSource.characterEncoding", "UTF-8");
-
-        HikariDataSource dataSource = new HikariDataSource(config);
-
-        return dataSource;
-    }
-
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactory =

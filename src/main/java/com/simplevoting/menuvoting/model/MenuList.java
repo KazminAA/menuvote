@@ -5,7 +5,6 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.math.BigInteger;
 
 @Entity
 @Table(name = "menulists")
@@ -17,7 +16,7 @@ public class MenuList extends AbstractBaseEntity {
 
     @Column(name = "price", columnDefinition = "NUMERIC(10, 4) DEFAULT 0.0")
     @NotNull
-    private BigInteger price = BigInteger.ZERO;
+    private Double price = 0.0;
 
     @ManyToOne
     @JoinColumn(name = "menu_id", referencedColumnName = "id")
@@ -26,11 +25,17 @@ public class MenuList extends AbstractBaseEntity {
     public MenuList() {
     }
 
-    public MenuList(Integer id, String dish, BigInteger price, Menu menu) {
+    public MenuList(Integer id, String dish, double price, Menu menu) {
         super(id);
         this.dish = dish;
         this.price = price;
         this.menu = menu;
+    }
+
+    public MenuList(Integer id, String dish, Double price) {
+        super(id);
+        this.dish = dish;
+        this.price = price;
     }
 
     public String getDish() {
@@ -41,11 +46,11 @@ public class MenuList extends AbstractBaseEntity {
         this.dish = dish;
     }
 
-    public BigInteger getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(BigInteger price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
