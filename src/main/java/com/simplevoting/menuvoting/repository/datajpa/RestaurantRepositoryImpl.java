@@ -3,9 +3,11 @@ package com.simplevoting.menuvoting.repository.datajpa;
 import com.simplevoting.menuvoting.model.Restaurant;
 import com.simplevoting.menuvoting.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class RestaurantRepositoryImpl implements RestaurantRepository {
     @Autowired
     private DataJpaRestaurantRepository restaurantRepository;

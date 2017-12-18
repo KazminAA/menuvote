@@ -10,12 +10,12 @@ CREATE SEQUENCE global_seq START 100000;
 
 CREATE TABLE users
 (
-  id               INTEGER DEFAULT global_seq.nextval PRIMARY KEY,
-  name             VARCHAR                 NOT NULL,
-  email            VARCHAR                 NOT NULL,
-  password         VARCHAR                 NOT NULL,
-  registered       TIMESTAMP DEFAULT now() NOT NULL,
-  enabled          BOOL DEFAULT TRUE       NOT NULL,
+  id         INTEGER DEFAULT global_seq.nextval PRIMARY KEY,
+  name       VARCHAR                 NOT NULL,
+  email      VARCHAR                 NOT NULL,
+  password   VARCHAR                 NOT NULL,
+  registered TIMESTAMP DEFAULT now() NOT NULL,
+  enabled    BOOL DEFAULT TRUE       NOT NULL
 );
 CREATE UNIQUE INDEX users_unique_email_idx
   ON users (email);

@@ -3,10 +3,12 @@ package com.simplevoting.menuvoting.repository.datajpa;
 import com.simplevoting.menuvoting.model.Menu;
 import com.simplevoting.menuvoting.repository.MenuRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Repository
 public class MenuRepositoryImpl implements MenuRepository {
 
     @Autowired
