@@ -21,7 +21,7 @@ public interface DataJpaRestaurantRepository extends JpaRepository<Restaurant, I
     @Query("DELETE FROM Restaurant r WHERE r.id=:id")
     int delete(@Param("id") int id);
 
-    Restaurant findOne(int id);
+    Restaurant findById(int id);
 
     @Override
     List<Restaurant> findAll();

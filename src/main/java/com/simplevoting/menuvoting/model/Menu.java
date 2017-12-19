@@ -2,6 +2,7 @@ package com.simplevoting.menuvoting.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Set;
@@ -14,7 +15,7 @@ import java.util.Set;
 public class Menu extends AbstractBaseEntity {
     @Column(name = "date", columnDefinition = "date default now()")
     @NotNull
-    private Date date = new Date();
+    private LocalDate date = LocalDate.now();
 
     @Column(name = "curvotenum", columnDefinition = "default 0")
     @NotNull
@@ -25,16 +26,16 @@ public class Menu extends AbstractBaseEntity {
     @NotNull
     private Restaurant restaurant;
 
-    @OneToMany(mappedBy = "menu")
+    @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY)
     private Set<MenuList> menuList;
 
-    @OneToMany(mappedBy = "menu")
+    @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY)
     private Set<Vote> votes;
 
     public Menu() {
     }
 
-    public Menu(Integer id, Date date, Restaurant restaurant, Integer curvotenum, Set<MenuList> menuList) {
+    public Menu(Integer id, LocalDate date, Restaurant restaurant, Integer curvotenum, Set<MenuList> menuList) {
         super(id);
         this.date = date;
         this.restaurant = restaurant;
@@ -49,11 +50,11 @@ public class Menu extends AbstractBaseEntity {
         this.restaurant = menu.getRestaurant();
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -111,6 +112,6 @@ public class Menu extends AbstractBaseEntity {
 
     @Override
     public String toString() {
-        return String.format("Menu for '%s' on %s: %s", restaurant.getName(), date.toString(), Arrays.toString(menuList.toArray()));
+        return String.format("Menu for '%s' on %s (%d)", restaurant.getName(), date.toString(), this.getId());
     }
 }

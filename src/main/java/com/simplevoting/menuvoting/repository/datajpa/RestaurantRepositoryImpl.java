@@ -19,7 +19,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepository {
 
     @Override
     public Restaurant get(int id) {
-        return restaurantRepository.findOne(id);
+        return restaurantRepository.findById(id);
     }
 
     @Override
