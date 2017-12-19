@@ -38,6 +38,12 @@ public class MenuList extends AbstractBaseEntity {
         this.price = price;
     }
 
+    public MenuList(MenuList menuList) {
+        this.setId(menuList.getId());
+        this.dish = menuList.getDish();
+        this.price = menuList.getPrice();
+    }
+
     public String getDish() {
         return dish;
     }

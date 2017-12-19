@@ -2,8 +2,8 @@ package com.simplevoting.menuvoting.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -14,7 +14,7 @@ import java.util.Set;
 public class Menu extends AbstractBaseEntity {
     @Column(name = "date", columnDefinition = "date default now()")
     @NotNull
-    private LocalDate date = LocalDate.now();
+    private Date date = new Date();
 
     @Column(name = "curvotenum", columnDefinition = "default 0")
     @NotNull
@@ -22,6 +22,7 @@ public class Menu extends AbstractBaseEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
+    @NotNull
     private Restaurant restaurant;
 
     @OneToMany(mappedBy = "menu")
@@ -33,18 +34,26 @@ public class Menu extends AbstractBaseEntity {
     public Menu() {
     }
 
-    public Menu(Integer id, LocalDate date, Restaurant restaurant, Set<MenuList> menuList) {
+    public Menu(Integer id, Date date, Restaurant restaurant, Integer curvotenum, Set<MenuList> menuList) {
         super(id);
         this.date = date;
         this.restaurant = restaurant;
+        this.curvotenum = curvotenum;
         this.menuList = menuList;
     }
 
-    public LocalDate getDate() {
+    public Menu(Menu menu) {
+        this.setId(menu.getId());
+        this.date = menu.getDate();
+        this.curvotenum = menu.getCurvotenum();
+        this.restaurant = menu.getRestaurant();
+    }
+
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
