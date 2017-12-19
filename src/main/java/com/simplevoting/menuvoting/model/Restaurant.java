@@ -18,7 +18,7 @@ public class Restaurant extends AbstractBaseEntity {
     private String name;
 
     @Column(name = "address")
-    @Pattern(regexp = "[a-zа-я]{1,3}\\.[a-zA-Zа-яА-Я-]+\\,\\s\\d{1,3}")
+    @Pattern(regexp = "[a-zа-я]{1,3}\\.[a-zA-Zа-яА-Я-]+\\,\\s\\d{1,3}[a-zа-я]?")
     private String address;
 
     public Restaurant() {
@@ -35,6 +35,12 @@ public class Restaurant extends AbstractBaseEntity {
         this.address = address;
     }
 
+    public Restaurant(Restaurant restaurant) {
+        this.setId(restaurant.getId());
+        this.name = restaurant.getName();
+        this.address = restaurant.getAddress();
+    }
+
     public String getName() {
         return name;
     }
@@ -43,9 +49,17 @@ public class Restaurant extends AbstractBaseEntity {
         this.name = name;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     @Override
     public String toString() {
-        return String.format("Restaurant '%s' (%d)", this.name, getId());
+        return String.format("Restaurant '%s' (%d), address: '%s'", this.name, getId(), this.address);
     }
 
     @Override

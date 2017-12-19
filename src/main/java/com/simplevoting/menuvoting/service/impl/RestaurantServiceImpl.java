@@ -31,7 +31,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     public Restaurant update(Restaurant restaurant) {
         Assert.notNull(restaurant, "Restaurant mast not be null.");
-        return checkNotFoundWithId(restaurant, restaurant.getId());
+        return checkNotFoundWithId(repository.save(restaurant), restaurant.getId());
     }
 
     @Override
