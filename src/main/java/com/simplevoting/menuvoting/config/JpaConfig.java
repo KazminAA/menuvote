@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import javax.transaction.TransactionManager;
 import java.util.Properties;
 
 @Configuration
@@ -33,16 +32,13 @@ public class JpaConfig {
 
     @Bean(destroyMethod = "close")
     public javax.sql.DataSource datasource() {
-        org.apache.tomcat.jdbc.pool.DataSource ds = new org.apache.tomcat.jdbc.pool.DataSource();
-        ds.setDriverClassName(env.getRequiredProperty("spring.datasource.driver-class-name"));
-        ds.setUrl(env.getRequiredProperty("spring.datasource.url"));
-        ds.setUsername(env.getRequiredProperty("spring.datasource.username"));
-        ds.setPassword(env.getRequiredProperty("spring.datasource.password"));
-        ds.setInitialSize(5);
-        ds.setMaxActive(10);
-        ds.setMaxIdle(5);
-        ds.setMinIdle(2);
-        return ds;
+        org.apache.tomcat.jdbc.pool.DataSource dataSource = new org.apache.tomcat.jdbc.pool.DataSource();
+        dataSource.setDriverClassName(env.getRequiredProperty("spring.datasource.driver-class-name"));
+        dataSource.setUrl(env.getRequiredProperty("spring.datasource.url"));
+        dataSource.setUsername(env.getRequiredProperty("spring.datasource.username"));
+        dataSource.setPassword(env.getRequiredProperty("spring.datasource.password"));
+        dataSource.setInitialSize(Integer.parseInt(env.getRequiredProperty("spring.datasource.tomcat.initial-size")));
+        return dataSource;
     }
 
     @Bean

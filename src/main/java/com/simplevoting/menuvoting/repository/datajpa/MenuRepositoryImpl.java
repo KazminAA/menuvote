@@ -35,11 +35,6 @@ public class MenuRepositoryImpl implements MenuRepository {
     }
 
     @Override
-    public List<Menu> getBetweenWithList(LocalDate start, LocalDate end) {
-        return menuRepository.findAllDateBetweenWithList(start, end);
-    }
-
-    @Override
     public List<Menu> getBetweenWithVotes(LocalDate start, LocalDate end) {
         return menuRepository.findAllDateBetweenWithVotes(start, end);
     }

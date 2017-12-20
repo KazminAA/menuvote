@@ -4,7 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
+import java.util.Collections;
 import java.util.Set;
 
 @Entity
@@ -26,8 +26,8 @@ public class Menu extends AbstractBaseEntity {
     @NotNull
     private Restaurant restaurant;
 
-    @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY)
-    private Set<MenuList> menuList;
+    @OneToMany(mappedBy = "menu", fetch = FetchType.EAGER)
+    private Set<MenuList> menuList = Collections.EMPTY_SET;
 
     @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY)
     private Set<Vote> votes;
@@ -112,6 +112,6 @@ public class Menu extends AbstractBaseEntity {
 
     @Override
     public String toString() {
-        return String.format("Menu for '%s' on %s (%d)", restaurant.getName(), date.toString(), this.getId());
+        return String.format("Menu for '%s' on %s (%d): %s", restaurant.getName(), date.toString(), this.getId(), Arrays.asList(menuList.toArray()));
     }
 }

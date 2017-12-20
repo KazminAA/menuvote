@@ -1,5 +1,6 @@
 package com.simplevoting.menuvoting.service.impl;
 
+import com.simplevoting.menuvoting.MenuListTestData;
 import com.simplevoting.menuvoting.model.Menu;
 import com.simplevoting.menuvoting.service.MenuService;
 import com.simplevoting.menuvoting.utils.exception.NotFoundException;
@@ -25,9 +26,8 @@ public class MenuServiceImplTest extends AbstractServiceTest {
 
     @Test
     public void create() {
-        Menu created = new Menu(null, LocalDate.of(2017, 12, 19), RESTAURANT1, 0, Collections.emptySet());
-        System.out.println(created);
-        service.create(created);
+        Menu newMenu = new Menu(null, LocalDate.of(2017, 12, 19), RESTAURANT1, 0, Collections.emptySet());
+        Menu created = service.create(newMenu);
         assertMatch(service.getAll(), MENU2, MENU4, MENU5, MENU6, MENU1, created, MENU3);
     }
 
@@ -78,15 +78,18 @@ public class MenuServiceImplTest extends AbstractServiceTest {
     }
 
     @Test
-    public void getBetweenWithList() {
-        Assert.assertTrue(false);
-        //TODO make implementation of getBetweenWithList test(first change test data)
+    public void getAllWithMenuList() {
+        List<Menu> menus = service.getAll();
+        MenuListTestData.assertMatch(menus.get(2).getMenuList(), MenuListTestData.MENU_SET5);
+        MenuListTestData.assertMatch(menus.get(4).getMenuList(), MenuListTestData.MENU_SET1);
+        Menu menu = service.get(MENU5.getId());
+        MenuListTestData.assertMatch(menu.getMenuList(), MENU5.getMenuList());
     }
 
     @Test
     public void getBetweenWithVotes() {
         Assert.assertTrue(false);
-        //TODO make implementation of getBetweenWithVotes test(first add votes test data)
+        //TODO make implementation of getBetweenWithVotes for MenuServiceImpl test(first add votes test data)
 
     }
 

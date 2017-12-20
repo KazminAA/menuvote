@@ -4,7 +4,9 @@ import com.simplevoting.menuvoting.model.AbstractBaseEntity;
 import com.simplevoting.menuvoting.model.MenuList;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,6 +23,13 @@ public class MenuListTestData {
     public static final MenuList MENU_LIST10 = new MenuList(AbstractBaseEntity.START_SEQ + 21, "Макароны по флотски", 15.1);
     public static final MenuList MENU_LIST11 = new MenuList(AbstractBaseEntity.START_SEQ + 22, "Пирог с черникой", 27.0);
     public static final MenuList MENU_LIST12 = new MenuList(AbstractBaseEntity.START_SEQ + 23, "Чай", 0.45);
+
+    public static final Set<MenuList> MENU_SET1 = new HashSet<>(Arrays.asList(MENU_LIST5, MENU_LIST6));
+    public static final Set<MenuList> MENU_SET2 = new HashSet<>(Arrays.asList(MENU_LIST1, MENU_LIST2));
+    public static final Set<MenuList> MENU_SET3 = new HashSet<>(Arrays.asList(MENU_LIST3, MENU_LIST4));
+    public static final Set<MenuList> MENU_SET4 = new HashSet<>(Arrays.asList(MENU_LIST7, MENU_LIST8));
+    public static final Set<MenuList> MENU_SET5 = new HashSet<>(Arrays.asList(MENU_LIST11, MENU_LIST12));
+    public static final Set<MenuList> MENU_SET6 = new HashSet<>(Arrays.asList(MENU_LIST9, MENU_LIST10));
 
     List<MenuList> allMenuList = Arrays.asList(MENU_LIST1, MENU_LIST2, MENU_LIST3, MENU_LIST4, MENU_LIST5, MENU_LIST6
             , MENU_LIST7, MENU_LIST8, MENU_LIST9, MENU_LIST10, MENU_LIST11, MENU_LIST12);

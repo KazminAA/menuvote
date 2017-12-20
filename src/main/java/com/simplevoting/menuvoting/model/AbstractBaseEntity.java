@@ -1,5 +1,7 @@
 package com.simplevoting.menuvoting.model;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 import org.springframework.data.annotation.AccessType;
 
 import javax.persistence.*;
@@ -10,7 +12,16 @@ public abstract class AbstractBaseEntity {
     public static final int START_SEQ = 100000;
 
     @Id
-    @SequenceGenerator(name = "global_gen", sequenceName = "global_seq", allocationSize = 1, initialValue = START_SEQ)
+    @GenericGenerator(
+            name = "global_gen",
+            strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
+            parameters = {
+                    @Parameter(name = "sequence_name", value = "global_seq"),
+                    @Parameter(name = "optimizer", value = "none"),
+                    @Parameter(name = "initial_value", value = "" + START_SEQ),
+                    @Parameter(name = "increment_size", value = "1")
+            }
+    )
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_gen")
     private Integer id;
 

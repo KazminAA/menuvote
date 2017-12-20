@@ -1,13 +1,14 @@
 package com.simplevoting.menuvoting.model;
 
+import org.springframework.util.CollectionUtils;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.*;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
@@ -32,8 +33,7 @@ public class User extends AbstractBaseEntity {
     private String password;
 
     @Column(name = "registered", columnDefinition = "timestamp default now()")
-    @NotNull
-    private Date registered = new Date();
+    private LocalDate registered = LocalDate.now();
 
     @Column(name = "enabled", nullable = false, columnDefinition = "bool default true")
     @NotNull
@@ -46,7 +46,7 @@ public class User extends AbstractBaseEntity {
     private Set<Role> roles;
 
     @OneToMany(mappedBy = "user")
-    private Set<Vote> votes;
+    private Set<Vote> votes = Collections.emptySet();
 
     public User() {
     }
@@ -57,10 +57,26 @@ public class User extends AbstractBaseEntity {
 
     public User(Integer id, String name, String email, String password, boolean enabled, Set<Role> roles) {
         super(id);
+        this.name = name;
         this.email = email;
         this.password = password;
         this.enabled = enabled;
         this.roles = roles;
+    }
+
+    public User(Integer id, String name, String email, String password, boolean enabled, LocalDate registered, Set<Role> roles) {
+        super(id);
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.registered = registered;
+        this.enabled = enabled;
+        this.roles = roles;
+    }
+
+    public User(User u) {
+        this(u.getId(), u.getName(), u.getEmail(), u.getPassword(), u.isEnabled(), u.getRoles());
+        this.setRegistered(u.getRegistered());
     }
 
     public String getName() {
@@ -87,11 +103,11 @@ public class User extends AbstractBaseEntity {
         this.password = password;
     }
 
-    public Date getRegistered() {
+    public LocalDate getRegistered() {
         return registered;
     }
 
-    public void setRegistered(Date registered) {
+    public void setRegistered(LocalDate registered) {
         this.registered = registered;
     }
 
@@ -105,6 +121,18 @@ public class User extends AbstractBaseEntity {
 
     public Set<Role> getRoles() {
         return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = CollectionUtils.isEmpty(roles) ? Collections.emptySet() : EnumSet.copyOf(roles);
+    }
+
+    public Set<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(Collection<Vote> votes) {
+        this.votes = CollectionUtils.isEmpty(votes) ? Collections.emptySet() : new LinkedHashSet<>(votes);
     }
 
     @Override
