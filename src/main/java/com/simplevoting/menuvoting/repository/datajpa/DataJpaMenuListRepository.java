@@ -1,6 +1,6 @@
 package com.simplevoting.menuvoting.repository.datajpa;
 
-import com.simplevoting.menuvoting.model.Restaurant;
+import com.simplevoting.menuvoting.model.MenuList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,19 +11,18 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-public interface DataJpaRestaurantRepository extends JpaRepository<Restaurant, Integer> {
+public interface DataJpaMenuListRepository extends JpaRepository<MenuList, Integer> {
 
     @Transactional
     @Override
-    Restaurant save(Restaurant restaurant);
+    MenuList save(MenuList dish);
 
-    @Transactional
     @Modifying
-    @Query("DELETE FROM Restaurant r WHERE r.id=:id")
+    @Transactional
+    @Query("DELETE FROM MenuList ml WHERE ml.id=:id")
     int delete(@Param("id") int id);
 
-    Restaurant findById(int id);
+    @Query("SELECT ml FROM MenuList ml WHERE ml.menu.id=:id")
+    List<MenuList> findAllByMenu_Id(@Param("id") int menu_id);
 
-    @Override
-    List<Restaurant> findAll();
 }
