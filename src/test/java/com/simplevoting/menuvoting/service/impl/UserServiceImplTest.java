@@ -4,7 +4,6 @@ import com.simplevoting.menuvoting.model.Role;
 import com.simplevoting.menuvoting.model.User;
 import com.simplevoting.menuvoting.service.UserService;
 import com.simplevoting.menuvoting.utils.exception.NotFoundException;
-import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,9 @@ import java.util.EnumSet;
 import java.util.List;
 
 import static com.simplevoting.menuvoting.UserTestData.*;
+import static com.simplevoting.menuvoting.UserTestData.assertMatch;
+import static com.simplevoting.menuvoting.VoteTestData.*;
+import static com.simplevoting.menuvoting.VoteTestData.assertMatch;
 
 public class UserServiceImplTest extends AbstractServiceTest {
     @Autowired
@@ -94,7 +96,7 @@ public class UserServiceImplTest extends AbstractServiceTest {
 
     @Test
     public void getWithVotes() {
-        Assert.assertTrue(false);
-        //TODO make implementation of getWithVotes for UserServiceImpl test(first add votes test data)
+        User user = service.getWithVotes(USER1.getId());
+        assertMatch(user.getVotes(), VOTE1, VOTE4);
     }
 }

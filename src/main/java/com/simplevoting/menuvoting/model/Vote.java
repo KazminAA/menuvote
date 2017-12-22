@@ -35,6 +35,10 @@ public class Vote {
         id.setDate(date);
     }
 
+    public Integer getUserId() {
+        return id.getUser_id();
+    }
+
     public User getUser() {
         return this.user;
     }
@@ -45,6 +49,11 @@ public class Vote {
 
     public void setMenu(Menu menu) {
         this.menu = menu;
+    }
+
+    @Override
+    public String toString() {
+        return id.toString() + menu.getId();
     }
 
     @Override

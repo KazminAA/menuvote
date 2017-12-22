@@ -38,6 +38,11 @@ public class VoteId implements Serializable {
     }
 
     @Override
+    public String toString() {
+        return String.format("(%s (%d))", date.toString(), user_id);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof VoteId)) return false;
