@@ -18,10 +18,6 @@ public class Menu extends AbstractBaseEntity {
     @NotNull
     private LocalDate date = LocalDate.now();
 
-    @Column(name = "curvotenum", columnDefinition = "default 0")
-    @NotNull
-    private Integer curvotenum = 0;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
     @NotNull
@@ -40,14 +36,12 @@ public class Menu extends AbstractBaseEntity {
         super(id);
         this.date = date;
         this.restaurant = restaurant;
-        this.curvotenum = curvotenum;
         this.menuList = menuList;
     }
 
     public Menu(Menu menu) {
         this.setId(menu.getId());
         this.date = menu.getDate();
-        this.curvotenum = menu.getCurvotenum();
         this.restaurant = menu.getRestaurant();
     }
 
@@ -57,14 +51,6 @@ public class Menu extends AbstractBaseEntity {
 
     public void setDate(LocalDate date) {
         this.date = date;
-    }
-
-    public Integer getCurvotenum() {
-        return curvotenum;
-    }
-
-    public void setCurvotenum(Integer curvotenum) {
-        this.curvotenum = curvotenum;
     }
 
     public Set<MenuList> getMenuList() {

@@ -41,7 +41,6 @@ CREATE TABLE menus
 (
   id            INTEGER DEFAULT global_seq.nextval PRIMARY KEY,
   date          DATE DEFAULT now() NOT NULL,
-  curvotenum    INTEGER DEFAULT 0,
   restaurant_id INTEGER            NOT NULL,
   FOREIGN KEY (restaurant_id) REFERENCES restaurants (id) ON DELETE CASCADE
 );

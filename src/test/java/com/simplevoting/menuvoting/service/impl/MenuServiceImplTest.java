@@ -39,7 +39,6 @@ public class MenuServiceImplTest extends AbstractServiceTest {
     public void update() {
         Menu updated = new Menu(MENU3);
         updated.setDate(LocalDate.of(2011, 11, 11));
-        updated.setCurvotenum(10);
         updated.setRestaurant(RESTAURANT2);
         service.update(updated);
         assertMatch(service.getAll(), updated, MENU2, MENU4, MENU5, MENU6, MENU1);
