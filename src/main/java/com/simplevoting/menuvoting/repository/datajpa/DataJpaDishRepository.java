@@ -1,6 +1,7 @@
 package com.simplevoting.menuvoting.repository.datajpa;
 
-import com.simplevoting.menuvoting.model.MenuList;
+import com.simplevoting.menuvoting.model.Dish;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -9,20 +10,21 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-public interface DataJpaMenuListRepository extends JpaRepository<MenuList, Integer> {
-
+public interface DataJpaDishRepository extends JpaRepository<Dish, Integer> {
     @Transactional
     @Override
-    MenuList save(MenuList dish);
+    Dish save(Dish dish);
 
-    @Modifying
     @Transactional
-    @Query("DELETE FROM MenuList ml WHERE ml.id=:id")
+    @Modifying
+    @Query("DELETE FROM Dish d WHERE d.id=:id")
     int delete(@Param("id") int id);
 
-    @Query("SELECT ml FROM MenuList ml WHERE ml.menu.id=:id")
-    List<MenuList> findAllByMenu_Id(@Param("id") int menu_id);
+    Optional<Dish> findById(Integer id);
 
+    @Override
+    List<Dish> findAll(Sort sort);
 }

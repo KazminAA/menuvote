@@ -1,18 +1,19 @@
 package com.simplevoting.menuvoting.service;
 
 import com.simplevoting.menuvoting.model.Restaurant;
+import com.simplevoting.menuvoting.utils.exception.NotFoundException;
 
 import java.util.List;
 
 public interface RestaurantService {
 
-    Restaurant create(Restaurant restaurant);
+    Restaurant create(Restaurant restaurant) throws IllegalArgumentException;
 
     Restaurant update(Restaurant restaurant);
 
-    Restaurant get(int id);
+    Restaurant get(int id) throws NotFoundException;
 
-    void delete(int id);
+    void delete(int id) throws NotFoundException;
 
     List<Restaurant> getAll();
 }

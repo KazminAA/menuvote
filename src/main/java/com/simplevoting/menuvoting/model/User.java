@@ -11,9 +11,8 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Entity
-@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
-@NamedEntityGraphs({
-        @NamedEntityGraph(name = "user_votes", attributeNodes = {@NamedAttributeNode(value = "votes")})
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")
 })
 public class User extends AbstractBaseEntity {
     @Column(name = "name", nullable = false)

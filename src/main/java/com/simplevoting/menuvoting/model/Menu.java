@@ -3,32 +3,29 @@ package com.simplevoting.menuvoting.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
-@Table(name = "menus", uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "restaurant_id"}, name = "menu_date_restaurant_idx")})
-@NamedEntityGraphs({
-        @NamedEntityGraph(name = "menu_votes", attributeNodes = {@NamedAttributeNode(value = "votes")})
+@Table(name = "menus", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"date", "restaurant_id"}, name = "menu_date_restaurant_idx")
 })
 public class Menu extends AbstractBaseEntity {
-    @Column(name = "date", columnDefinition = "date default now()")
+    @Column(name = "date", columnDefinition = "date default now()", nullable = false)
     @NotNull
     private LocalDate date = LocalDate.now();
-
-    @Column(name = "curvotenum", columnDefinition = "default 0")
-    @NotNull
-    private Integer curvotenum = 0;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
     @NotNull
     private Restaurant restaurant;
 
-    @OneToMany(mappedBy = "menu", fetch = FetchType.EAGER)
-    private Set<MenuList> menuList = Collections.EMPTY_SET;
+    @OneToMany(
+            mappedBy = "menu",
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<MenuDish> dishes = Collections.EMPTY_SET;
 
     @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY)
     private Set<Vote> votes;
@@ -36,18 +33,16 @@ public class Menu extends AbstractBaseEntity {
     public Menu() {
     }
 
-    public Menu(Integer id, LocalDate date, Restaurant restaurant, Integer curvotenum, Set<MenuList> menuList) {
+    public Menu(Integer id, LocalDate date, Restaurant restaurant, Set<MenuDish> dishes) {
         super(id);
         this.date = date;
         this.restaurant = restaurant;
-        this.curvotenum = curvotenum;
-        this.menuList = menuList;
+        this.dishes = new HashSet<>(dishes);
     }
 
     public Menu(Menu menu) {
         this.setId(menu.getId());
         this.date = menu.getDate();
-        this.curvotenum = menu.getCurvotenum();
         this.restaurant = menu.getRestaurant();
     }
 
@@ -59,20 +54,12 @@ public class Menu extends AbstractBaseEntity {
         this.date = date;
     }
 
-    public Integer getCurvotenum() {
-        return curvotenum;
+    public Set<MenuDish> getMenuList() {
+        return dishes;
     }
 
-    public void setCurvotenum(Integer curvotenum) {
-        this.curvotenum = curvotenum;
-    }
-
-    public Set<MenuList> getMenuList() {
-        return menuList;
-    }
-
-    public void setMenuList(Set<MenuList> menuList) {
-        this.menuList = menuList;
+    public void setMenuList(Set<MenuDish> dishes) {
+        this.dishes = dishes;
     }
 
     public Restaurant getRestaurant() {
@@ -109,6 +96,6 @@ public class Menu extends AbstractBaseEntity {
 
     @Override
     public String toString() {
-        return String.format("Menu for '%s' on %s (%d): %s", restaurant.getName(), date.toString(), this.getId(), Arrays.asList(menuList.toArray()));
+        return String.format("Menu for '%s' on %s (%d):\n %s", restaurant.getName(), date.toString(), this.getId(), Arrays.asList(dishes.toArray()));
     }
 }

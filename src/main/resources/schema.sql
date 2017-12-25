@@ -2,7 +2,8 @@ DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS restaurants;
 DROP TABLE IF EXISTS menus;
-DROP TABLE IF EXISTS menulists;
+DROP TABLE IF EXISTS dishes;
+DROP TABLE IF EXISTS menus_dishes;
 DROP TABLE IF EXISTS votes;
 DROP SEQUENCE IF EXISTS global_seq;
 
@@ -34,27 +35,36 @@ CREATE TABLE restaurants
   name VARCHAR NOT NULL,
   address VARCHAR
 );
-CREATE UNIQUE INDEX restaurant_menu_idx
+CREATE UNIQUE INDEX restaurant_name_idx
   ON restaurants (name);
 
 CREATE TABLE menus
 (
   id            INTEGER DEFAULT global_seq.nextval PRIMARY KEY,
   date          DATE DEFAULT now() NOT NULL,
-  curvotenum    INTEGER DEFAULT 0,
   restaurant_id INTEGER            NOT NULL,
   FOREIGN KEY (restaurant_id) REFERENCES restaurants (id) ON DELETE CASCADE
 );
 CREATE UNIQUE INDEX menu_date_restaurant_idx
   ON menus (date, restaurant_id);
 
-CREATE TABLE menulists
+CREATE TABLE dishes
 (
-  id      INTEGER        DEFAULT global_seq.nextval PRIMARY KEY,
-  dish    VARCHAR NOT NULL,
-  price   NUMERIC(10, 4) DEFAULT 0.0,
+  id          INTEGER        DEFAULT global_seq.nextval PRIMARY KEY,
+  name        VARCHAR NOT NULL,
+  description VARCHAR        DEFAULT ''
+);
+CREATE UNIQUE INDEX dish_name_idx
+  ON dishes (name);
+
+CREATE TABLE menus_dishes
+(
   menu_id INTEGER NOT NULL,
-  FOREIGN KEY (menu_id) REFERENCES menus (id) ON DELETE CASCADE
+  dish_id INTEGER NOT NULL,
+  price   NUMERIC(10, 4) DEFAULT 0.0,
+  PRIMARY KEY (menu_id, dish_id),
+  FOREIGN KEY (menu_id) REFERENCES menus (id) ON DELETE CASCADE,
+  FOREIGN KEY (dish_id) REFERENCES dishes (id) ON DELETE CASCADE
 );
 
 CREATE TABLE votes
