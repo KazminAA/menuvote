@@ -53,6 +53,10 @@ public class Vote {
         this.menu = menu;
     }
 
+    public VoteId getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return id.toString() + menu.getId();

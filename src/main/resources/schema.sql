@@ -50,9 +50,9 @@ CREATE UNIQUE INDEX menu_date_restaurant_idx
 
 CREATE TABLE dishes
 (
-  id          INTEGER        DEFAULT global_seq.nextval PRIMARY KEY,
+  id          INTEGER DEFAULT global_seq.nextval PRIMARY KEY,
   name        VARCHAR NOT NULL,
-  description VARCHAR        DEFAULT ''
+  description VARCHAR DEFAULT ''
 );
 CREATE UNIQUE INDEX dish_name_idx
   ON dishes (name);
