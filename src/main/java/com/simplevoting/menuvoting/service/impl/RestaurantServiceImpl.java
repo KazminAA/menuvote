@@ -23,7 +23,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public Restaurant create(Restaurant restaurant) {
+    public Restaurant create(Restaurant restaurant) throws IllegalArgumentException {
         Assert.notNull(restaurant, "Restaurant mast not be null.");
         checkNew(restaurant);
         return repository.save(restaurant);

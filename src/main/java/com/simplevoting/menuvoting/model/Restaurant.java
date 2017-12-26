@@ -9,7 +9,9 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "restaurants", uniqueConstraints = {@UniqueConstraint(columnNames = "name", name = "restaurant_menu_idx")})
+@Table(name = "restaurants", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "name", name = "restaurant_name_idx")
+})
 public class Restaurant extends AbstractBaseEntity {
     @Column(name = "name", nullable = false)
     @NotBlank

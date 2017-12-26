@@ -5,7 +5,9 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
-@Table(name = "votes", uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "user_id"}, name = "date_user_idx")})
+@Table(name = "votes", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"date", "user_id"}, name = "date_user_idx")
+})
 public class Vote {
 
     @EmbeddedId

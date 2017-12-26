@@ -24,7 +24,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public Menu create(Menu menu) {
+    public Menu create(Menu menu) throws IllegalArgumentException {
         Assert.notNull(menu, "Menu mast not be null.");
         checkNew(menu);
         return repository.save(menu);

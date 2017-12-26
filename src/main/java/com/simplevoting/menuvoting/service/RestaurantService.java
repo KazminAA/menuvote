@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface RestaurantService {
 
-    Restaurant create(Restaurant restaurant);
+    Restaurant create(Restaurant restaurant) throws IllegalArgumentException;
 
     Restaurant update(Restaurant restaurant) throws NotFoundException;
 
