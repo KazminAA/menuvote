@@ -5,7 +5,6 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -82,15 +81,19 @@ public class Menu extends AbstractBaseEntity {
         if (this == o) return true;
         if (!(o instanceof Menu)) return false;
         if (!super.equals(o)) return false;
+
         Menu menu = (Menu) o;
-        return Objects.equals(date, menu.date) &&
-                Objects.equals(restaurant, menu.restaurant);
+
+        if (!date.equals(menu.date)) return false;
+        return restaurant.equals(menu.restaurant);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(super.hashCode(), date, restaurant);
+        int result = super.hashCode();
+        result = 31 * result + date.hashCode();
+        result = 31 * result + restaurant.hashCode();
+        return result;
     }
 
     @Override

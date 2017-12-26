@@ -13,35 +13,35 @@ public class UserRepositoryImpl implements UserRepository {
     private static final Sort SORT_NAME_EMAIL = new Sort(Sort.Direction.ASC, "name", "email");
 
     @Autowired
-    private DataJpaUserRepository userRepository;
+    private DataJpaUserRepository repository;
 
     @Override
     public User save(User user) {
-        return userRepository.save(user);
+        return repository.save(user);
     }
 
     @Override
     public boolean delete(int id) {
-        return userRepository.delete(id) != 0;
+        return repository.delete(id) != 0;
     }
 
     @Override
     public User get(int id) {
-        return userRepository.findById(id).orElse(null);
+        return repository.findById(id).orElse(null);
     }
 
     @Override
     public User getByEmail(String email) {
-        return userRepository.getByEmail(email);
+        return repository.getByEmail(email);
     }
 
     @Override
     public List<User> getAll() {
-        return userRepository.findAll(SORT_NAME_EMAIL);
+        return repository.findAll(SORT_NAME_EMAIL);
     }
 
     @Override
     public User getWithVotes(int id) {
-        return userRepository.getWithVotes(id);
+        return repository.getWithVotes(id);
     }
 }

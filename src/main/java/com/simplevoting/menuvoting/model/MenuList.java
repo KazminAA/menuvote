@@ -4,7 +4,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Objects;
 
 @Entity
 @Table(name = "menulists")
@@ -73,15 +72,19 @@ public class MenuList extends AbstractBaseEntity {
         if (this == o) return true;
         if (!(o instanceof MenuList)) return false;
         if (!super.equals(o)) return false;
+
         MenuList menuList = (MenuList) o;
-        return Objects.equals(dish, menuList.dish) &&
-                Objects.equals(price, menuList.price);
+
+        if (!dish.equals(menuList.dish)) return false;
+        return price.equals(menuList.price);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(super.hashCode(), dish, price);
+        int result = super.hashCode();
+        result = 31 * result + dish.hashCode();
+        result = 31 * result + price.hashCode();
+        return result;
     }
 
     @Override

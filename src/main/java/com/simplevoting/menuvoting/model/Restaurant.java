@@ -7,7 +7,6 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.Objects;
 
 @Entity
 @Table(name = "restaurants", uniqueConstraints = {@UniqueConstraint(columnNames = "name", name = "restaurant_menu_idx")})
@@ -67,14 +66,16 @@ public class Restaurant extends AbstractBaseEntity {
         if (this == o) return true;
         if (!(o instanceof Restaurant)) return false;
         if (!super.equals(o)) return false;
+
         Restaurant that = (Restaurant) o;
-        return Objects.equals(name, that.name) &&
-                Objects.equals(address, that.address);
+
+        return name.equals(that.name);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(super.hashCode(), name, address);
+        int result = super.hashCode();
+        result = 31 * result + name.hashCode();
+        return result;
     }
 }
