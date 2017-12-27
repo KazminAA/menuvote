@@ -27,10 +27,10 @@ public interface DataJpaMenuRepository extends JpaRepository<Menu, Integer> {
     @Query("SELECT m FROM Menu m WHERE m.id=:id")
     Menu findMenuById(@Param("id") int id);
 
-    @Query("SELECT m FROM Menu m WHERE m.date BETWEEN :start AND :end ORDER BY m.date DESC")
+    @Query("SELECT m FROM Menu m WHERE m.date BETWEEN :start AND :end ORDER BY m.date DESC, m.restaurant.name")
     List<Menu> findAllDateBetween(@Param("start") LocalDate start, @Param("end") LocalDate end);
 
     @EntityGraph(attributePaths = {"votes"}, type = EntityGraph.EntityGraphType.FETCH)
-    @Query("SELECT m FROM Menu m WHERE m.date BETWEEN :start AND :end ORDER BY m.date DESC")
+    @Query("SELECT m FROM Menu m WHERE m.date BETWEEN :start AND :end ORDER BY m.date DESC, m.restaurant.name")
     List<Menu> findAllDateBetweenWithVotes(@Param("start") LocalDate start, @Param("end") LocalDate end);
 }

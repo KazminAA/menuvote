@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 import static com.simplevoting.menuvoting.MenuTestData.*;
@@ -72,7 +73,8 @@ public class MenuServiceImplTest extends AbstractServiceTest {
     @Test
     public void getAll() {
         List<Menu> menus = service.getAll();
-        assertMatch(menus, MENU2, MENU4, MENU5, MENU6, MENU1, MENU3);
+        menus.forEach(e -> e.setMenuList(new HashSet<>(e.getMenuList())));
+        assertMatch(menus, MENU5, MENU4, MENU6, MENU1, MENU2, MENU3);
     }
 
     @Test
@@ -86,13 +88,5 @@ public class MenuServiceImplTest extends AbstractServiceTest {
     public void testValidation() {
         validateRootCause(() -> service.create(new Menu(null, null, RESTAURANT2, Collections.emptySet())), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new Menu(null, LocalDate.of(2015, 12, 24), null, Collections.emptySet())), ConstraintViolationException.class);
-    }
-
-    @Test
-    public void addDish() {
-    }
-
-    @Test
-    public void removeDish() {
     }
 }
