@@ -78,6 +78,6 @@ public class MenuDish implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("%s: %s\n", getDish().toString(), Double.valueOf(this.price).toString());
+        return String.format("%s: %s\n", getDish().toString(), price);
     }
 }
