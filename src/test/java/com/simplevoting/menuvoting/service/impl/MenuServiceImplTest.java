@@ -87,4 +87,12 @@ public class MenuServiceImplTest extends AbstractServiceTest {
         validateRootCause(() -> service.create(new Menu(null, null, RESTAURANT2, Collections.emptySet())), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new Menu(null, LocalDate.of(2015, 12, 24), null, Collections.emptySet())), ConstraintViolationException.class);
     }
+
+    @Test
+    public void addDish() {
+    }
+
+    @Test
+    public void removeDish() {
+    }
 }

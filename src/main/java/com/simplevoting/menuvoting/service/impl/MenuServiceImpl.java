@@ -1,6 +1,8 @@
 package com.simplevoting.menuvoting.service.impl;
 
 import com.simplevoting.menuvoting.model.Menu;
+import com.simplevoting.menuvoting.model.MenuDish;
+import com.simplevoting.menuvoting.repository.DishRepository;
 import com.simplevoting.menuvoting.repository.MenuRepository;
 import com.simplevoting.menuvoting.service.MenuService;
 import com.simplevoting.menuvoting.utils.exception.NotFoundException;
@@ -17,10 +19,12 @@ import static com.simplevoting.menuvoting.utils.ValidationUtil.checkNotFoundWith
 @Service
 public class MenuServiceImpl implements MenuService {
     private final MenuRepository repository;
+    private final DishRepository dishRepository;
 
     @Autowired
-    public MenuServiceImpl(MenuRepository repository) {
+    public MenuServiceImpl(MenuRepository repository, DishRepository dishRepository) {
         this.repository = repository;
+        this.dishRepository = dishRepository;
     }
 
     @Override
@@ -54,5 +58,18 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public List<Menu> getBetweenWithVotes(LocalDate start, LocalDate end) {
         return repository.getBetweenWithVotes(start, end);
+    }
+
+    @Override
+    public void addDish(int menu_id, int dish_id, double price) {
+        Menu menu = get(menu_id);
+        MenuDish menuDish = new MenuDish(menu, dishRepository.get(dish_id), price);
+        menu.getMenuList().add(menuDish);
+        update(menu);
+    }
+
+    @Override
+    public void removeDish(int menu_id, int dish_id) {
+
     }
 }

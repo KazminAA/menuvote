@@ -1,19 +1,20 @@
 package com.simplevoting.menuvoting.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity(name = "MenuDish")
 @Table(name = "menus_dishes")
-public class MenuDish {
+@AssociationOverrides({
+        @AssociationOverride(name = "id.menu",
+                joinColumns = @JoinColumn(name = "menu_id")),
+        @AssociationOverride(name = "id.dish",
+                joinColumns = @JoinColumn(name = "dish_id"))
+})
+public class MenuDish implements Serializable {
     @EmbeddedId
-    private MenuDishId id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("menu_id")
-    private Menu menu;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @MapsId("dish_id")
-    private Dish dish;
+    private MenuDishId id = new MenuDishId();
     @Column(name = "price", columnDefinition = "NUMERIC(10, 4) DEFAULT 0.0")
     private double price;
 
@@ -21,18 +22,17 @@ public class MenuDish {
     }
 
     public MenuDish(Menu menu, Dish dish, double price) {
-        this.menu = menu;
-        this.dish = dish;
-        this.id = new MenuDishId(menu.getId(), dish.getId());
         this.price = price;
+        id.setMenu(menu);
+        id.setDish(dish);
     }
 
-    public Dish getDish() {
-        return dish;
+    public MenuDishId getId() {
+        return id;
     }
 
-    public void setDish(Dish dish) {
-        this.dish = dish;
+    public void setId(MenuDishId id) {
+        this.id = id;
     }
 
     public double getPrice() {
@@ -41,6 +41,24 @@ public class MenuDish {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    @Transient
+    public Menu getMenu() {
+        return id.getMenu();
+    }
+
+    public void setMenu(Menu menu) {
+        id.setMenu(menu);
+    }
+
+    @Transient
+    public Dish getDish() {
+        return id.getDish();
+    }
+
+    public void setDish(Dish dish) {
+        id.setDish(dish);
     }
 
     @Override
@@ -60,6 +78,6 @@ public class MenuDish {
 
     @Override
     public String toString() {
-        return String.format("%s: %d\n", dish.toString(), price);
+        return String.format("%s: %s\n", getDish().toString(), Double.valueOf(this.price).toString());
     }
 }

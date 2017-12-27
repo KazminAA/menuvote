@@ -20,12 +20,11 @@ public class Menu extends AbstractBaseEntity {
     private Restaurant restaurant;
 
     @OneToMany(
-            mappedBy = "menu",
+            mappedBy = "id.menu",
             fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+            cascade = CascadeType.ALL
     )
-    private Set<MenuDish> dishes = Collections.EMPTY_SET;
+    private Set<MenuDish> dishes = Collections.emptySet();
 
     @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY)
     private Set<Vote> votes;
