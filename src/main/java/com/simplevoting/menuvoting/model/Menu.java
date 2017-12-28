@@ -22,7 +22,8 @@ public class Menu extends AbstractBaseEntity {
     @OneToMany(
             mappedBy = "id.menu",
             fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
     private Set<MenuDish> dishes = Collections.emptySet();
 
@@ -43,6 +44,7 @@ public class Menu extends AbstractBaseEntity {
         this.setId(menu.getId());
         this.date = menu.getDate();
         this.restaurant = menu.getRestaurant();
+        this.dishes = menu.dishes;
     }
 
     public LocalDate getDate() {

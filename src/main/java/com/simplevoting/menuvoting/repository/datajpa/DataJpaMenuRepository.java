@@ -23,7 +23,7 @@ public interface DataJpaMenuRepository extends JpaRepository<Menu, Integer> {
     @Query("DELETE FROM Menu m WHERE m.id = :id")
     int delete(@Param("id") int id);
 
-    @EntityGraph(attributePaths = {"menuList", "votes"})
+    @EntityGraph(attributePaths = {"votes"})
     @Query("SELECT m FROM Menu m WHERE m.id=:id")
     Menu findMenuById(@Param("id") int id);
 

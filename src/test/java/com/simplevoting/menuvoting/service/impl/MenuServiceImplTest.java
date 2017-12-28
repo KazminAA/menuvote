@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 
 import static com.simplevoting.menuvoting.MenuTestData.*;
@@ -28,7 +27,7 @@ public class MenuServiceImplTest extends AbstractServiceTest {
     public void create() {
         Menu newMenu = new Menu(null, LocalDate.of(2017, 12, 19), RESTAURANT1, Collections.emptySet());
         Menu created = service.create(newMenu);
-        assertMatch(service.getAll(), MENU2, MENU4, MENU5, MENU6, MENU1, created, MENU3);
+        assertMatch(service.getAll(), created, MENU5, MENU4, MENU6, MENU1, MENU2, MENU3);
     }
 
     @Test
@@ -37,13 +36,13 @@ public class MenuServiceImplTest extends AbstractServiceTest {
         updated.setDate(LocalDate.of(2011, 11, 11));
         updated.setRestaurant(RESTAURANT2);
         service.update(updated);
-        assertMatch(service.getAll(), updated, MENU2, MENU4, MENU5, MENU6, MENU1);
+        assertMatch(service.getAll(), MENU5, MENU4, MENU6, MENU1, MENU2, updated);
     }
 
     @Test
     public void delete() {
         service.delete(MENU3.getId());
-        assertMatch(service.getAll(), MENU2, MENU4, MENU5, MENU6, MENU1);
+        assertMatch(service.getAll(), MENU5, MENU4, MENU6, MENU1, MENU2);
     }
 
     @Test
@@ -67,13 +66,12 @@ public class MenuServiceImplTest extends AbstractServiceTest {
     @Test
     public void getBetween() {
         List<Menu> menus = service.getBetween(MIN_DATE, MAX_DATE);
-        assertMatch(menus, MENU4, MENU5, MENU6, MENU2, MENU1, MENU3);
+        assertMatch(menus, MENU5, MENU4, MENU6, MENU1, MENU2, MENU3);
     }
 
     @Test
     public void getAll() {
         List<Menu> menus = service.getAll();
-        menus.forEach(e -> e.setMenuList(new HashSet<>(e.getMenuList())));
         assertMatch(menus, MENU5, MENU4, MENU6, MENU1, MENU2, MENU3);
     }
 
