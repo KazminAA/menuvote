@@ -20,7 +20,7 @@ public class Menu extends AbstractBaseEntity {
     private Restaurant restaurant;
 
     @OneToMany(
-            mappedBy = "id.menu",
+            mappedBy = "menu",
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL,
             orphanRemoval = true
@@ -44,7 +44,11 @@ public class Menu extends AbstractBaseEntity {
         this.setId(menu.getId());
         this.date = menu.getDate();
         this.restaurant = menu.getRestaurant();
-        this.dishes = menu.dishes;
+        this.dishes = new HashSet<>();
+        menu.getMenuList().forEach(menuDish -> {
+            MenuDish newMenuDish = new MenuDish(this, menuDish.getDish(), menuDish.getPrice());
+            this.dishes.add(newMenuDish);
+        });
     }
 
     public LocalDate getDate() {

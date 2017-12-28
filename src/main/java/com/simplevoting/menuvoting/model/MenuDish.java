@@ -6,25 +6,27 @@ import java.util.Objects;
 
 @Entity(name = "MenuDish")
 @Table(name = "menus_dishes")
-@AssociationOverrides({
-        @AssociationOverride(name = "id.menu",
-                joinColumns = @JoinColumn(name = "menu_id")),
-        @AssociationOverride(name = "id.dish",
-                joinColumns = @JoinColumn(name = "dish_id"))
-})
 public class MenuDish implements Serializable {
     @EmbeddedId
     private MenuDishId id = new MenuDishId();
     @Column(name = "price", columnDefinition = "NUMERIC(10, 4) DEFAULT 0.0")
     private double price;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("menu_id")
+    private Menu menu;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @MapsId("dish_id")
+    private Dish dish;
 
     public MenuDish() {
     }
 
     public MenuDish(Menu menu, Dish dish, double price) {
         this.price = price;
-        id.setMenu(menu);
-        id.setDish(dish);
+        this.menu = menu;
+        this.dish = dish;
+        id.setMenu_id(menu.getId());
+        id.setDish_id(dish.getId());
     }
 
     public MenuDishId getId() {
@@ -43,22 +45,22 @@ public class MenuDish implements Serializable {
         this.price = price;
     }
 
-    @Transient
     public Menu getMenu() {
-        return id.getMenu();
+        return menu;
     }
 
     public void setMenu(Menu menu) {
-        id.setMenu(menu);
+        this.menu = menu;
+        id.setMenu_id(menu != null ? menu.getId() : null);
     }
 
-    @Transient
     public Dish getDish() {
-        return id.getDish();
+        return dish;
     }
 
     public void setDish(Dish dish) {
-        id.setDish(dish);
+        this.dish = dish;
+        id.setDish_id(dish != null ? dish.getId() : null);
     }
 
     @Override
@@ -67,13 +69,15 @@ public class MenuDish implements Serializable {
         if (!(o instanceof MenuDish)) return false;
         MenuDish menuDish = (MenuDish) o;
         return Double.compare(menuDish.price, price) == 0 &&
-                Objects.equals(id, menuDish.id);
+                Objects.equals(id, menuDish.id) &&
+                Objects.equals(menu, menuDish.menu) &&
+                Objects.equals(dish, menuDish.dish);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, price);
+        return Objects.hash(id, price, menu, dish);
     }
 
     @Override

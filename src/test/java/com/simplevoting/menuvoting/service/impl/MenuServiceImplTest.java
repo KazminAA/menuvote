@@ -1,6 +1,7 @@
 package com.simplevoting.menuvoting.service.impl;
 
 import com.simplevoting.menuvoting.model.Menu;
+import com.simplevoting.menuvoting.model.MenuDish;
 import com.simplevoting.menuvoting.service.MenuService;
 import com.simplevoting.menuvoting.utils.exception.NotFoundException;
 import org.junit.Assert;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
+import static com.simplevoting.menuvoting.DishTestData.DISH8;
 import static com.simplevoting.menuvoting.MenuTestData.*;
 import static com.simplevoting.menuvoting.RestaurantTestData.RESTAURANT1;
 import static com.simplevoting.menuvoting.RestaurantTestData.RESTAURANT2;
@@ -35,6 +37,7 @@ public class MenuServiceImplTest extends AbstractServiceTest {
         Menu updated = new Menu(MENU3);
         updated.setDate(LocalDate.of(2011, 11, 11));
         updated.setRestaurant(RESTAURANT2);
+        updated.getMenuList().add(new MenuDish(updated, DISH8, 55.31));
         service.update(updated);
         assertMatch(service.getAll(), MENU5, MENU4, MENU6, MENU1, MENU2, updated);
     }
