@@ -1,11 +1,14 @@
 package com.simplevoting.menuvoting.service.impl;
 
+import com.simplevoting.menuvoting.model.Dish;
 import com.simplevoting.menuvoting.model.Menu;
 import com.simplevoting.menuvoting.model.MenuDish;
 import com.simplevoting.menuvoting.service.DishService;
 import com.simplevoting.menuvoting.service.MenuListService;
 import com.simplevoting.menuvoting.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Iterator;
 
 public class MenuListServiceImpl implements MenuListService {
     private final MenuService menuService;
@@ -27,6 +30,15 @@ public class MenuListServiceImpl implements MenuListService {
 
     @Override
     public void removeDish(int menu_id, int dish_id) {
-
+        Menu menu = menuService.get(menu_id);
+        Dish dish = dishService.get(dish_id);
+        for (Iterator<MenuDish> iterator = menu.getMenuList().iterator(); iterator.hasNext(); ) {
+            MenuDish menuDish = iterator.next();
+            if (menuDish.getDish().equals(dish)) {
+                iterator.remove();
+                menuDish.setMenu(null);
+                menuDish.setDish(null);
+            }
+        }
     }
 }
