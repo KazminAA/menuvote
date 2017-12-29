@@ -15,8 +15,11 @@ import java.util.List;
 
 import static com.simplevoting.menuvoting.DishTestData.DISH8;
 import static com.simplevoting.menuvoting.MenuTestData.*;
+import static com.simplevoting.menuvoting.MenuTestData.assertMatch;
 import static com.simplevoting.menuvoting.RestaurantTestData.RESTAURANT1;
 import static com.simplevoting.menuvoting.RestaurantTestData.RESTAURANT2;
+import static com.simplevoting.menuvoting.VoteTestData.*;
+import static com.simplevoting.menuvoting.VoteTestData.assertMatch;
 import static com.simplevoting.menuvoting.utils.DateUtils.MAX_DATE;
 import static com.simplevoting.menuvoting.utils.DateUtils.MIN_DATE;
 
@@ -56,8 +59,9 @@ public class MenuServiceImplTest extends AbstractServiceTest {
 
     @Test
     public void get() {
-        Menu menu = service.get(MENU3.getId());
-        assertMatch(menu, MENU3);
+        Menu menu = service.get(MENU2.getId());
+        assertMatch(menu, MENU2);
+        assertMatch(menu.getVotes(), VOTE2, VOTE1);
     }
 
     @Test

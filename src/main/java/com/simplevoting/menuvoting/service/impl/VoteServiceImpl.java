@@ -1,25 +1,26 @@
 package com.simplevoting.menuvoting.service.impl;
 
 import com.simplevoting.menuvoting.model.Vote;
-import com.simplevoting.menuvoting.repository.MenuRepository;
 import com.simplevoting.menuvoting.repository.VoteRepository;
 import com.simplevoting.menuvoting.service.VoteService;
 import com.simplevoting.menuvoting.utils.exception.EditClosedPeriodException;
 import com.simplevoting.menuvoting.utils.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import static com.simplevoting.menuvoting.utils.ValidationUtil.checkNotFoundWithId;
+
+@Service
 public class VoteServiceImpl implements VoteService {
     private final VoteRepository voteRepository;
-    private final MenuRepository menuRepository;
 
     @Autowired
-    public VoteServiceImpl(VoteRepository voteRepository, MenuRepository menuRepository) {
+    public VoteServiceImpl(VoteRepository voteRepository) {
         this.voteRepository = voteRepository;
-        this.menuRepository = menuRepository;
     }
 
     @Override
@@ -30,18 +31,22 @@ public class VoteServiceImpl implements VoteService {
 
     @Override
     public Vote update(Vote vote) throws EditClosedPeriodException, NotFoundException {
-        if (
-                (LocalTime.now().isAfter(LocalTime.of(11, 00))) ||
-                        LocalDate.now().isAfter(vote.getDate())) {
-            throw new EditClosedPeriodException();
-        }
-        //TODO votes srvice delete
-        return null;
+        checkPeriod(vote.getDate());
+        return checkNotFoundWithId(vote, vote.getUserId());
     }
 
     @Override
-    public Vote delete(LocalDate date, int user_id) {
-        //TODO votes service delete
-        return null;
+    public void delete(LocalDate date, int user_id) throws EditClosedPeriodException, NotFoundException {
+        checkPeriod(date);
+        checkNotFoundWithId(voteRepository.delete(date, user_id), user_id);
     }
+
+    private void checkPeriod(LocalDate date) {
+        if (
+                (LocalTime.now().isAfter(LocalTime.of(11, 00))) ||
+                        LocalDate.now().isAfter(date)) {
+            throw new EditClosedPeriodException();
+        }
+    }
+
 }

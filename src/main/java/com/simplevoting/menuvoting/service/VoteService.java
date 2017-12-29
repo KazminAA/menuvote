@@ -9,7 +9,7 @@ import java.time.LocalDate;
 public interface VoteService {
     Vote create(Vote vote, int menu_id) throws NotFoundException;
 
-    Vote update(Vote vote) throws EditClosedPeriodException;
+    Vote update(Vote vote) throws EditClosedPeriodException, NotFoundException;
 
-    Vote delete(LocalDate date, int user_id) throws EditClosedPeriodException;
+    void delete(LocalDate date, int user_id) throws EditClosedPeriodException, NotFoundException;
 }

@@ -96,7 +96,7 @@ public class UserServiceImplTest extends AbstractServiceTest {
 
     @Test
     public void getWithVotes() {
-        User user = service.getWithVotes(USER1.getId());
-        assertMatch(user.getVotes(), VOTE1, VOTE4);
+        User user = service.getWithVotes(USER2.getId());
+        assertMatch(user.getVotes(), VOTE2, VOTE4);
     }
 }
