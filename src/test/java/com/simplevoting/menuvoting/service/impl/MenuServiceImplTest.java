@@ -20,8 +20,8 @@ import static com.simplevoting.menuvoting.RestaurantTestData.RESTAURANT1;
 import static com.simplevoting.menuvoting.RestaurantTestData.RESTAURANT2;
 import static com.simplevoting.menuvoting.VoteTestData.*;
 import static com.simplevoting.menuvoting.VoteTestData.assertMatch;
-import static com.simplevoting.menuvoting.utils.DateUtils.MAX_DATE;
-import static com.simplevoting.menuvoting.utils.DateUtils.MIN_DATE;
+import static com.simplevoting.menuvoting.utils.DateTimeUtils.MAX_DATE;
+import static com.simplevoting.menuvoting.utils.DateTimeUtils.MIN_DATE;
 
 public class MenuServiceImplTest extends AbstractServiceTest {
 

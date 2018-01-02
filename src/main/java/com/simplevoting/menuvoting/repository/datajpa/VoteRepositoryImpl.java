@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 public class VoteRepositoryImpl implements VoteRepository {
@@ -20,5 +21,10 @@ public class VoteRepositoryImpl implements VoteRepository {
     @Override
     public boolean delete(LocalDate date, int user_id) {
         return dataJpaVoteRepository.delete(date, user_id) != 0;
+    }
+
+    @Override
+    public List<Vote> getAll() {
+        return dataJpaVoteRepository.findAll();
     }
 }

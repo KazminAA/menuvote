@@ -10,13 +10,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 import static com.simplevoting.menuvoting.utils.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class VoteServiceImpl implements VoteService {
     private final VoteRepository voteRepository;
+    private final String SAVE_EXCEPTION_MESSAGE = "Try to save vote for different user!";
 
     @Autowired
     public VoteServiceImpl(VoteRepository voteRepository) {
@@ -24,29 +27,36 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
-    public Vote create(Vote vote, int menu_id) {
-        Assert.notNull(vote, "Vote must not be null.");
+    public Vote create(Vote vote, int user_id) {
+        checkVote(vote, user_id);
         return voteRepository.save(vote);
     }
 
     @Override
-    public Vote update(Vote vote) throws EditClosedPeriodException, NotFoundException {
-        checkPeriod(vote.getDate());
-        return checkNotFoundWithId(vote, vote.getUserId());
+    public void update(Vote vote, int user_id) throws EditClosedPeriodException, NotFoundException {
+        checkVote(vote, user_id);
+        if (checkPeriod(vote.getDate())) throw new EditClosedPeriodException();
+        voteRepository.save(vote);
     }
 
     @Override
     public void delete(LocalDate date, int user_id) throws EditClosedPeriodException, NotFoundException {
-        checkPeriod(date);
+        if (checkPeriod(date)) throw new EditClosedPeriodException();
         checkNotFoundWithId(voteRepository.delete(date, user_id), user_id);
     }
 
-    private void checkPeriod(LocalDate date) {
-        if (
-                (LocalTime.now().isAfter(LocalTime.of(11, 00))) ||
-                        LocalDate.now().isAfter(date)) {
-            throw new EditClosedPeriodException();
-        }
+    @Override
+    public List<Vote> getAll() {
+        return voteRepository.getAll();
+    }
+
+    private boolean checkPeriod(LocalDate date) {
+        return LocalDateTime.now().isAfter(LocalDateTime.of(date, LocalTime.of(11, 0)));
+    }
+
+    private void checkVote(Vote vote, int user_id) {
+        Assert.notNull(vote, "Vote must not be null.");
+        if (vote.getUserId() != user_id) throw new IllegalArgumentException(SAVE_EXCEPTION_MESSAGE);
     }
 
 }

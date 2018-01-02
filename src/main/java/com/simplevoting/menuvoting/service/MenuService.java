@@ -6,8 +6,8 @@ import com.simplevoting.menuvoting.utils.exception.NotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.simplevoting.menuvoting.utils.DateUtils.MAX_DATE;
-import static com.simplevoting.menuvoting.utils.DateUtils.MIN_DATE;
+import static com.simplevoting.menuvoting.utils.DateTimeUtils.MAX_DATE;
+import static com.simplevoting.menuvoting.utils.DateTimeUtils.MIN_DATE;
 
 public interface MenuService {
     Menu create(Menu menu) throws IllegalArgumentException;

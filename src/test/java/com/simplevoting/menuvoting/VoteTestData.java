@@ -16,6 +16,10 @@ public class VoteTestData {
     public static final Vote VOTE4 = new Vote(LocalDate.of(2017, 11, 2), USER2, MENU5);
     public static final Vote VOTE5 = new Vote(LocalDate.of(2017, 11, 2), ADMIN1, MENU6);
 
+    public static Vote getNewTomorrowVote() {
+        return new Vote(LocalDate.now().plusDays(1), USER1, MENU6);
+    }
+
     public static void assertMatch(Vote actual, Vote expected) {
         assertThat(actual)
                 .usingComparator(VoteTestData::compare)

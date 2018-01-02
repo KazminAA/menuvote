@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void update(User user) {
         Assert.notNull(user, "user must not be null");
-        checkNotFoundWithId(repository.save(user), user.getId());
+        repository.save(user);
     }
 
     @Override

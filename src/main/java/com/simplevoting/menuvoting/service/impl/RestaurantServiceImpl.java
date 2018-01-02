@@ -32,7 +32,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     public Restaurant update(Restaurant restaurant) throws NotFoundException {
         Assert.notNull(restaurant, "Restaurant mast not be null.");
-        return checkNotFoundWithId(repository.save(restaurant), restaurant.getId());
+        return repository.save(restaurant);
     }
 
     @Override

@@ -29,6 +29,11 @@ public class Vote {
         this.menu = menu;
     }
 
+    public Vote(Vote vote) {
+        this.id = vote.getId();
+        this.menu = new Menu(vote.getMenu());
+    }
+
     public LocalDate getDate() {
         return id.getDate();
     }

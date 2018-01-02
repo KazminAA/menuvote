@@ -33,7 +33,7 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public Menu update(Menu menu) throws NotFoundException {
         Assert.notNull(menu, "Menu mast not be null.");
-        return checkNotFoundWithId(repository.save(menu), menu.getId());
+        return repository.save(menu);
     }
 
     @Override
