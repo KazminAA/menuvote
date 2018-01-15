@@ -18,6 +18,8 @@ public interface MenuService {
 
     Menu get(int id) throws NotFoundException;
 
+    List<Menu> getForRestaurant(int restaurant_id);
+
     default List<Menu> getByDate(LocalDate date) {
         return getBetween(date, date);
     }

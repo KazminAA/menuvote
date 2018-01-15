@@ -28,7 +28,7 @@ public class Menu extends AbstractBaseEntity {
     private Set<MenuDish> dishes = Collections.emptySet();
 
     @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY)
-    private Set<Vote> votes;
+    private Set<Vote> votes = Collections.emptySet();
 
     public Menu() {
     }

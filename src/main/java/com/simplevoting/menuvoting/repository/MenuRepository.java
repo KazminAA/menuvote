@@ -13,6 +13,8 @@ public interface MenuRepository {
 
     Menu get(int id);
 
+    List<Menu> getByRestaurant(int restaurant_id);
+
     default List<Menu> getByDate(LocalDate date) {
         return getBetween(date, date);
     }

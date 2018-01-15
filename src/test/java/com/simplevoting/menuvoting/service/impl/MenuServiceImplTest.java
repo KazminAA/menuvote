@@ -4,12 +4,12 @@ import com.simplevoting.menuvoting.model.Menu;
 import com.simplevoting.menuvoting.model.MenuDish;
 import com.simplevoting.menuvoting.service.MenuService;
 import com.simplevoting.menuvoting.utils.exception.NotFoundException;
-import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -71,6 +71,12 @@ public class MenuServiceImplTest extends AbstractServiceTest {
     }
 
     @Test
+    public void getForRestaurant() {
+        List<Menu> menus = service.getForRestaurant(RESTAURANT1.getId());
+        assertMatch(menus, MENU4, MENU2);
+    }
+
+    @Test
     public void getBetween() {
         List<Menu> menus = service.getBetween(MIN_DATE, MAX_DATE);
         assertMatch(menus, MENU5, MENU4, MENU6, MENU1, MENU2, MENU3);
@@ -84,9 +90,9 @@ public class MenuServiceImplTest extends AbstractServiceTest {
 
     @Test
     public void getBetweenWithVotes() {
-        Assert.assertTrue(false);
-        //TODO make implementation of getBetweenWithVotes for MenuServiceImpl test(first add votes test data)
-
+        List<Menu> menus = service.getBetweenWithVotes(LocalDate.of(2017, 11, 1), LocalDate.of(2017, 11, 1));
+        List<Menu> testMenuList = Arrays.asList(MENU1, MENU2, MENU3);
+        assertMatchAllFields(menus, testMenuList);
     }
 
     @Test

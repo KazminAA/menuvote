@@ -7,9 +7,11 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 
 import static com.simplevoting.menuvoting.MenuDishTestData.*;
 import static com.simplevoting.menuvoting.RestaurantTestData.*;
+import static com.simplevoting.menuvoting.VoteTestData.*;
 import static com.simplevoting.menuvoting.model.AbstractBaseEntity.START_SEQ;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,6 +36,10 @@ public class MenuTestData {
         MENU5.getMenuList().add(MENU_DISH12);
         MENU6.getMenuList().add(MENU_DISH9);
         MENU6.getMenuList().add(MENU_DISH10);
+        MENU1.setVotes(new HashSet<>(Arrays.asList(VOTE3)));
+        MENU2.setVotes(new HashSet<>(Arrays.asList(VOTE1, VOTE2)));
+        MENU5.setVotes(new HashSet<>(Arrays.asList(VOTE4)));
+        MENU6.setVotes(new HashSet<>(Arrays.asList(VOTE5)));
     }
 
     public static void assertMatch(Menu actual, Menu expected) {
@@ -49,6 +55,13 @@ public class MenuTestData {
     public static void assertMatch(Iterable<Menu> actual, Iterable<Menu> expected) {
         assertThat(actual)
                 .usingElementComparatorIgnoringFields("votes")
+                .usingComparatorForElementFieldsWithType(Comparator.comparing(Restaurant::getId), Restaurant.class)
+                .isEqualTo(expected);
+    }
+
+    public static void assertMatchAllFields(Iterable<Menu> actual, Iterable<Menu> expected) {
+        assertThat(actual)
+                .usingFieldByFieldElementComparator()
                 .usingComparatorForElementFieldsWithType(Comparator.comparing(Restaurant::getId), Restaurant.class)
                 .isEqualTo(expected);
     }

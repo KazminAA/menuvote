@@ -47,6 +47,11 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
+    public List<Menu> getForRestaurant(int restaurant_id) {
+        return repository.getByRestaurant(restaurant_id);
+    }
+
+    @Override
     public List<Menu> getBetween(LocalDate start, LocalDate end) {
         return repository.getBetween(start, end);
     }
