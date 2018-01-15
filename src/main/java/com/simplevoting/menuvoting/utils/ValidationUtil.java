@@ -1,6 +1,7 @@
 package com.simplevoting.menuvoting.utils;
 
 
+import com.simplevoting.menuvoting.HasId;
 import com.simplevoting.menuvoting.model.AbstractBaseEntity;
 import com.simplevoting.menuvoting.utils.exception.NotFoundException;
 
@@ -34,7 +35,7 @@ public class ValidationUtil {
         }
     }
 
-    public static void assureIdConsistent(AbstractBaseEntity entity, int id) {
+    public static void assureIdConsistent(HasId entity, int id) {
 //      http://stackoverflow.com/a/32728226/548473
         if (entity.isNew()) {
             entity.setId(id);

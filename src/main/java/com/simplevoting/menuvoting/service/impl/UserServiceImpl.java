@@ -3,6 +3,8 @@ package com.simplevoting.menuvoting.service.impl;
 import com.simplevoting.menuvoting.model.User;
 import com.simplevoting.menuvoting.repository.UserRepository;
 import com.simplevoting.menuvoting.service.UserService;
+import com.simplevoting.menuvoting.to.UserTo;
+import com.simplevoting.menuvoting.utils.UserUtil;
 import com.simplevoting.menuvoting.utils.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,6 +50,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAll() {
         return repository.getAll();
+    }
+
+    @Override
+    public void update(UserTo userTo) {
+        User user = get(userTo.getId());
+        repository.save(UserUtil.updateFromTo(user, userTo));
+    }
+
+    @Override
+    public void enable(int id, boolean enabled) {
+        User user = get(id);
+        user.setEnabled(enabled);
+        repository.save(user);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.simplevoting.menuvoting.model;
 
+import com.simplevoting.menuvoting.HasId;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.springframework.data.annotation.AccessType;
@@ -8,7 +9,7 @@ import javax.persistence.*;
 
 @MappedSuperclass
 @AccessType(AccessType.Type.PROPERTY)
-public abstract class AbstractBaseEntity {
+public abstract class AbstractBaseEntity implements HasId {
     public static final int START_SEQ = 100000;
 
     @Id
@@ -32,14 +33,17 @@ public abstract class AbstractBaseEntity {
     protected AbstractBaseEntity() {
     }
 
+    @Override
     public Integer getId() {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }
 
+    @Override
     public boolean isNew() {
         return this.id == null;
     }
