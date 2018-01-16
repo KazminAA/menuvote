@@ -1,14 +1,19 @@
 package com.simplevoting.menuvoting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.simplevoting.menuvoting.HasId;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.springframework.data.annotation.AccessType;
 
-import javax.persistence.*;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 @AccessType(AccessType.Type.PROPERTY)
+@JsonIgnoreProperties({"new"})
 public abstract class AbstractBaseEntity implements HasId {
     public static final int START_SEQ = 100000;
 

@@ -1,5 +1,7 @@
 package com.simplevoting.menuvoting.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -28,6 +30,7 @@ public class Menu extends AbstractBaseEntity {
     private Set<MenuDish> dishes = Collections.emptySet();
 
     @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "menu-votes")
     private Set<Vote> votes = Collections.emptySet();
 
     public Menu() {

@@ -28,6 +28,11 @@ public abstract class AbstractUserController {
         return service.get(id);
     }
 
+    public User getWithVotes(int id) {
+        log.info("get {}", id);
+        return service.getWithVotes(id);
+    }
+
     public User create(User user) {
         log.info("create {}", user);
         checkNew(user);

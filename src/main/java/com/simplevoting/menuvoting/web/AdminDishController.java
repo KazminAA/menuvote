@@ -17,9 +17,9 @@ import static com.simplevoting.menuvoting.utils.ValidationUtil.assureIdConsisten
 import static org.slf4j.LoggerFactory.getLogger;
 
 @RestController
-@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = AdminDishController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminDishController {
-    static final String REST_URL = "rest/admin/dish";
+    static final String REST_URL = "/rest/admin/dishes";
     private static final Logger log = getLogger(AdminDishController.class);
 
     private final DishService service;

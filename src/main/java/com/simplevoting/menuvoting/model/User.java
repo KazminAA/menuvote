@@ -1,5 +1,6 @@
 package com.simplevoting.menuvoting.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
@@ -44,7 +45,8 @@ public class User extends AbstractBaseEntity {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "user-votes")
     private Set<Vote> votes = Collections.emptySet();
 
     public User() {

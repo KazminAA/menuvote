@@ -14,7 +14,7 @@ import java.util.List;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @RestController
-@RequestMapping("rest/restaurant")
+@RequestMapping("/rest/restaurants")
 public class RestaurantRestController {
     private static final Logger log = getLogger(RestaurantRestController.class);
 

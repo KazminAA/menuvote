@@ -18,7 +18,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 @RestController
 @RequestMapping(value = AdminRestaurantRestController.REST_URL)
 public class AdminRestaurantRestController {
-    static final String REST_URL = "rest/admin/restaurant";
+    static final String REST_URL = "/rest/admin/restaurants";
     private static final Logger log = getLogger(AdminRestaurantRestController.class);
 
     private final RestaurantService service;

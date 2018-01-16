@@ -1,5 +1,7 @@
 package com.simplevoting.menuvoting.config;
 
+import com.fasterxml.jackson.databind.Module;
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -62,7 +64,12 @@ public class JpaConfig {
     }
 
     @Bean
-    JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+    public Module datatypeHibernateModule() {
+        return new Hibernate5Module();
+    }
+
+    @Bean
+    public JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory);
         return transactionManager;

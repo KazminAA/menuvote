@@ -1,5 +1,8 @@
 package com.simplevoting.menuvoting.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -10,15 +13,18 @@ import java.util.Objects;
 })
 public class Vote {
 
+    @JsonIgnore
     @EmbeddedId
     VoteId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id", updatable = false, insertable = false)
+    @JsonBackReference(value = "user-votes")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id", referencedColumnName = "id")
+    @JsonBackReference(value = "menu-votes")
     private Menu menu;
 
     public Vote() {
@@ -60,6 +66,10 @@ public class Vote {
 
     public VoteId getId() {
         return id;
+    }
+
+    public Integer getMenu_id() {
+        return menu.getId();
     }
 
     @Override

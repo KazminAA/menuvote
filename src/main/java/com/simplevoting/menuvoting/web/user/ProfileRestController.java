@@ -1,7 +1,6 @@
 package com.simplevoting.menuvoting.web.user;
 
 import com.simplevoting.menuvoting.AuthorizedUser;
-import com.simplevoting.menuvoting.model.User;
 import com.simplevoting.menuvoting.to.UserTo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,8 +12,8 @@ public class ProfileRestController extends AbstractUserController {
     static final String REST_URL = "/rest/profile";
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public User get() {
-        return super.get(AuthorizedUser.id());
+    public com.simplevoting.menuvoting.model.User get() {
+        return super.getWithVotes(AuthorizedUser.id());
     }
 
     @DeleteMapping
