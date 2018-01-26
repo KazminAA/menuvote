@@ -24,7 +24,7 @@ public class MenuListServiceImpl implements MenuListService {
     public void addDish(int menu_id, int dish_id, double price) {
         Menu menu = menuService.get(menu_id);
         MenuDish menuDish = new MenuDish(menu, dishService.get(dish_id), price);
-        menu.getMenuList().add(menuDish);
+        menu.getDishes().add(menuDish);
         menuService.update(menu);
     }
 
@@ -32,7 +32,7 @@ public class MenuListServiceImpl implements MenuListService {
     public void removeDish(int menu_id, int dish_id) {
         Menu menu = menuService.get(menu_id);
         Dish dish = dishService.get(dish_id);
-        for (Iterator<MenuDish> iterator = menu.getMenuList().iterator(); iterator.hasNext(); ) {
+        for (Iterator<MenuDish> iterator = menu.getDishes().iterator(); iterator.hasNext(); ) {
             MenuDish menuDish = iterator.next();
             if (menuDish.getDish().equals(dish)) {
                 iterator.remove();

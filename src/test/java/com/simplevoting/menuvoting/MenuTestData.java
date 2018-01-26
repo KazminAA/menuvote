@@ -24,18 +24,18 @@ public class MenuTestData {
     public static final Menu MENU6 = new Menu(START_SEQ + 11, LocalDate.of(2017, 11, 2), RESTAURANT3, Collections.emptySet());
 
     static {
-        MENU1.getMenuList().add(MENU_DISH5);
-        MENU1.getMenuList().add(MENU_DISH6);
-        MENU2.getMenuList().add(MENU_DISH1);
-        MENU2.getMenuList().add(MENU_DISH2);
-        MENU3.getMenuList().add(MENU_DISH3);
-        MENU3.getMenuList().add(MENU_DISH4);
-        MENU4.getMenuList().add(MENU_DISH7);
-        MENU4.getMenuList().add(MENU_DISH8);
-        MENU5.getMenuList().add(MENU_DISH11);
-        MENU5.getMenuList().add(MENU_DISH12);
-        MENU6.getMenuList().add(MENU_DISH9);
-        MENU6.getMenuList().add(MENU_DISH10);
+        MENU1.getDishes().add(MENU_DISH5);
+        MENU1.getDishes().add(MENU_DISH6);
+        MENU2.getDishes().add(MENU_DISH1);
+        MENU2.getDishes().add(MENU_DISH2);
+        MENU3.getDishes().add(MENU_DISH3);
+        MENU3.getDishes().add(MENU_DISH4);
+        MENU4.getDishes().add(MENU_DISH7);
+        MENU4.getDishes().add(MENU_DISH8);
+        MENU5.getDishes().add(MENU_DISH11);
+        MENU5.getDishes().add(MENU_DISH12);
+        MENU6.getDishes().add(MENU_DISH9);
+        MENU6.getDishes().add(MENU_DISH10);
         MENU1.setVotes(new HashSet<>(Arrays.asList(VOTE3)));
         MENU2.setVotes(new HashSet<>(Arrays.asList(VOTE1, VOTE2)));
         MENU5.setVotes(new HashSet<>(Arrays.asList(VOTE4)));

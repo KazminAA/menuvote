@@ -56,8 +56,4 @@ public class MenuServiceImpl implements MenuService {
         return repository.getBetween(start, end);
     }
 
-    @Override
-    public List<Menu> getBetweenWithVotes(LocalDate start, LocalDate end) {
-        return repository.getBetweenWithVotes(start, end);
-    }
 }

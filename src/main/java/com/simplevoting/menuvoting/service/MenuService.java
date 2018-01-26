@@ -31,5 +31,4 @@ public interface MenuService {
         return menus;
     }
 
-    List<Menu> getBetweenWithVotes(LocalDate start, LocalDate end);
 }

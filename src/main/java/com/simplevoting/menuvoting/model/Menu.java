@@ -27,9 +27,10 @@ public class Menu extends AbstractBaseEntity {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @JsonManagedReference(value = "menu-dishes")
     private Set<MenuDish> dishes = Collections.emptySet();
 
-    @OneToMany(mappedBy = "menu", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "menu", fetch = FetchType.EAGER)
     @JsonManagedReference(value = "menu-votes")
     private Set<Vote> votes = Collections.emptySet();
 
@@ -48,7 +49,7 @@ public class Menu extends AbstractBaseEntity {
         this.date = menu.getDate();
         this.restaurant = menu.getRestaurant();
         this.dishes = new HashSet<>();
-        menu.getMenuList().forEach(menuDish -> {
+        menu.getDishes().forEach(menuDish -> {
             MenuDish newMenuDish = new MenuDish(this, menuDish.getDish(), menuDish.getPrice());
             this.dishes.add(newMenuDish);
         });
@@ -62,11 +63,11 @@ public class Menu extends AbstractBaseEntity {
         this.date = date;
     }
 
-    public Set<MenuDish> getMenuList() {
+    public Set<MenuDish> getDishes() {
         return dishes;
     }
 
-    public void setMenuList(Set<MenuDish> dishes) {
+    public void setDishes(Set<MenuDish> dishes) {
         this.dishes = dishes;
     }
 
@@ -84,6 +85,10 @@ public class Menu extends AbstractBaseEntity {
 
     public void setVotes(Set<Vote> votes) {
         this.votes = votes;
+    }
+
+    public int getTotal() {
+        return this.votes.size();
     }
 
     @Override

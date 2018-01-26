@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class MenuServiceImplTest extends AbstractServiceTest {
         Menu updated = new Menu(MENU3);
         updated.setDate(LocalDate.of(2011, 11, 11));
         updated.setRestaurant(RESTAURANT2);
-        updated.getMenuList().add(new MenuDish(updated, DISH8, 55.31));
+        updated.getDishes().add(new MenuDish(updated, DISH8, 55.31));
         service.update(updated);
         assertMatch(service.getAll(), MENU5, MENU4, MENU6, MENU1, MENU2, updated);
     }
@@ -86,13 +85,6 @@ public class MenuServiceImplTest extends AbstractServiceTest {
     public void getAll() {
         List<Menu> menus = service.getAll();
         assertMatch(menus, MENU5, MENU4, MENU6, MENU1, MENU2, MENU3);
-    }
-
-    @Test
-    public void getBetweenWithVotes() {
-        List<Menu> menus = service.getBetweenWithVotes(LocalDate.of(2017, 11, 1), LocalDate.of(2017, 11, 1));
-        List<Menu> testMenuList = Arrays.asList(MENU1, MENU2, MENU3);
-        assertMatchAllFields(menus, testMenuList);
     }
 
     @Test

@@ -53,7 +53,7 @@ public class AdminDishController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestBody Dish dish, @PathVariable("id") int id) throws IllegalArgumentException {
         assureIdConsistent(dish, id);
-        log.info("update {} with id=", dish, id);
+        log.info("update {} with id={}", dish, id);
         service.update(dish);
     }
 

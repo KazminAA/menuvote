@@ -38,9 +38,4 @@ public class MenuRepositoryImpl implements MenuRepository {
     public List<Menu> getByRestaurant(int restaurant_id) {
         return menuRepository.getByRestaurantId(restaurant_id);
     }
-
-    @Override
-    public List<Menu> getBetweenWithVotes(LocalDate start, LocalDate end) {
-        return menuRepository.findAllDateBetweenWithVotes(start, end);
-    }
 }

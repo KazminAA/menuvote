@@ -1,5 +1,8 @@
 package com.simplevoting.menuvoting.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -8,11 +11,13 @@ import java.util.Objects;
 @Table(name = "menus_dishes")
 public class MenuDish implements Serializable {
     @EmbeddedId
+    @JsonIgnore
     private MenuDishId id = new MenuDishId();
     @Column(name = "price", columnDefinition = "NUMERIC(10, 4) DEFAULT 0.0")
     private double price;
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("menu_id")
+    @JsonBackReference(value = "menu-dishes")
     private Menu menu;
     @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("dish_id")
