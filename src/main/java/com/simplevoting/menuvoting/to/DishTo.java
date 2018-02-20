@@ -8,6 +8,9 @@ public class DishTo {
     @Range(min = 0)
     private double price;
 
+    public DishTo() {
+    }
+
     public DishTo(Dish dish, double price) {
         this.dish = dish;
         this.price = price;
