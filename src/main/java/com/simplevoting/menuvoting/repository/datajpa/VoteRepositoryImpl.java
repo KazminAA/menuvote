@@ -27,4 +27,9 @@ public class VoteRepositoryImpl implements VoteRepository {
     public List<Vote> getAll() {
         return dataJpaVoteRepository.findAll();
     }
+
+    @Override
+    public boolean checkVote(LocalDate date, int user_id) {
+        return dataJpaVoteRepository.get(date, user_id) != null;
+    }
 }

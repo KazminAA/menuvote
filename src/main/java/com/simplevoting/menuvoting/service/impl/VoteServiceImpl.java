@@ -29,6 +29,9 @@ public class VoteServiceImpl implements VoteService {
     @Override
     public Vote create(Vote vote, int user_id) {
         checkVote(vote, user_id);
+        if (voteRepository.checkVote(vote.getDate(), vote.getUserId())) {
+            throw new IllegalStateException("On this date vote already exists.");
+        }
         return voteRepository.save(vote);
     }
 

@@ -11,4 +11,6 @@ public interface VoteRepository {
     boolean delete(LocalDate date, int user_id);
 
     List<Vote> getAll();
+
+    boolean checkVote(LocalDate date, int user_id);
 }

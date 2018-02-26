@@ -23,4 +23,7 @@ public interface DataJpaVoteRepository extends JpaRepository<Vote, VoteId> {
     @Override
     @Query("SELECT v FROM Vote v ORDER BY v.id.date DESC, v.id.user_id")
     List<Vote> findAll();
+
+    @Query("SELECT v FROM Vote v WHERE v.id.date=:date AND v.id.user_id=:user_id")
+    Vote get(@Param("date") LocalDate date, @Param("user_id") int user_id);
 }

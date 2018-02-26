@@ -7,6 +7,7 @@ import com.simplevoting.menuvoting.model.Vote;
 import com.simplevoting.menuvoting.service.MenuService;
 import com.simplevoting.menuvoting.service.UserService;
 import com.simplevoting.menuvoting.service.VoteService;
+import com.simplevoting.menuvoting.to.VoteTo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,7 +49,10 @@ public class VoteRestController {
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody Vote vote) {
+    public void update(@RequestBody VoteTo voteTo) {
+        Vote vote = new Vote(voteTo.getDate(),
+                userService.get(voteTo.getUserId()),
+                menuService.get(voteTo.getMenu_id()));
         log.info("update {}", vote);
         voteService.update(vote, AuthorizedUser.id());
     }
