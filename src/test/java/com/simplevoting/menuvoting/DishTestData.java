@@ -3,6 +3,7 @@ package com.simplevoting.menuvoting;
 import com.simplevoting.menuvoting.model.Dish;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static com.simplevoting.menuvoting.model.AbstractBaseEntity.START_SEQ;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,6 +17,8 @@ public class DishTestData {
     public static final Dish DISH6 = new Dish(START_SEQ + 17, "Макароны по флотски", "макароны с мясом");
     public static final Dish DISH7 = new Dish(START_SEQ + 18, "Пирог с черникой", "долго не черствеет");
     public static final Dish DISH8 = new Dish(START_SEQ + 19, "Чай", "сорт Принцесса Дури");
+
+    public static final List<Dish> DISH_LIST = Arrays.asList(DISH5, DISH6, DISH4, DISH7, DISH1, DISH3, DISH8, DISH2);
 
     public static void assertMatch(Dish actual, Dish expected) {
         assertThat(actual).isEqualToComparingFieldByField(expected);
