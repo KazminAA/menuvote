@@ -19,7 +19,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static com.simplevoting.menuvoting.utils.ValidationUtil.getRootCause;
+import static com.simplevoting.menuvoting.utils.validation.ValidationUtil.getRootCause;
 import static org.hamcrest.CoreMatchers.instanceOf;
 
 @ContextConfiguration(classes = {JpaConfig.class})

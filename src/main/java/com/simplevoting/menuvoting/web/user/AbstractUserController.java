@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static com.simplevoting.menuvoting.utils.ValidationUtil.assureIdConsistent;
-import static com.simplevoting.menuvoting.utils.ValidationUtil.checkNew;
+import static com.simplevoting.menuvoting.utils.validation.ValidationUtil.assureIdConsistent;
+import static com.simplevoting.menuvoting.utils.validation.ValidationUtil.checkNew;
 
 public abstract class AbstractUserController {
     protected final Logger log = LoggerFactory.getLogger(getClass());

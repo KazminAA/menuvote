@@ -11,8 +11,8 @@ import org.springframework.util.Assert;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.simplevoting.menuvoting.utils.ValidationUtil.checkNew;
-import static com.simplevoting.menuvoting.utils.ValidationUtil.checkNotFoundWithId;
+import static com.simplevoting.menuvoting.utils.validation.ValidationUtil.checkNew;
+import static com.simplevoting.menuvoting.utils.validation.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class MenuServiceImpl implements MenuService {

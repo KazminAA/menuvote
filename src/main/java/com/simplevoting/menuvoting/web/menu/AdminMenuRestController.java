@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.util.Arrays;
 
 import static com.simplevoting.menuvoting.utils.ResponseEntityWithLocation.getResponseCreatedWithId;
-import static com.simplevoting.menuvoting.utils.ValidationUtil.assureIdConsistent;
+import static com.simplevoting.menuvoting.utils.validation.ValidationUtil.assureIdConsistent;
 import static com.simplevoting.menuvoting.web.menu.AdminMenuRestController.REST_URL;
 import static org.slf4j.LoggerFactory.getLogger;
 

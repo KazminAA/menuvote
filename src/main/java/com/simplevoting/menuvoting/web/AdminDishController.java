@@ -13,7 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static com.simplevoting.menuvoting.utils.ResponseEntityWithLocation.getResponseCreatedWithId;
-import static com.simplevoting.menuvoting.utils.ValidationUtil.assureIdConsistent;
+import static com.simplevoting.menuvoting.utils.validation.ValidationUtil.assureIdConsistent;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @RestController

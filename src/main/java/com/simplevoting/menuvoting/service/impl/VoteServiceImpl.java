@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-import static com.simplevoting.menuvoting.utils.ValidationUtil.checkNotFoundWithId;
+import static com.simplevoting.menuvoting.utils.validation.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class VoteServiceImpl implements VoteService {

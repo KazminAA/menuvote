@@ -1,4 +1,4 @@
-package com.simplevoting.menuvoting.utils;
+package com.simplevoting.menuvoting.utils.validation;
 
 
 import com.simplevoting.menuvoting.HasId;
@@ -25,7 +25,7 @@ public class ValidationUtil {
 
     public static void checkNotFound(boolean found, String msg) {
         if (!found) {
-            throw new NotFoundException("Not found entity with " + msg);
+            throw new NotFoundException(msg);
         }
     }
 
