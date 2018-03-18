@@ -3,11 +3,22 @@ package com.simplevoting.menuvoting.utils.validation;
 
 import com.simplevoting.menuvoting.HasId;
 import com.simplevoting.menuvoting.model.AbstractBaseEntity;
+import com.simplevoting.menuvoting.utils.MessageUtil;
 import com.simplevoting.menuvoting.utils.exception.NotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ValidationUtil {
 
+    private static MessageUtil messageUtil;
+
     private ValidationUtil() {
+    }
+
+    @Autowired
+    public ValidationUtil(MessageUtil messageUtil) {
+        this.messageUtil = messageUtil;
     }
 
     public static void checkNotFoundWithId(boolean found, int id) {
@@ -25,7 +36,7 @@ public class ValidationUtil {
 
     public static void checkNotFound(boolean found, String msg) {
         if (!found) {
-            throw new NotFoundException(msg);
+            throw new NotFoundException(messageUtil.getMessage("exception.common.notFound", msg));
         }
     }
 
