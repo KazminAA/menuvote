@@ -1,6 +1,7 @@
 package com.simplevoting.menuvoting.web;
 
 import com.simplevoting.menuvoting.config.JpaConfig;
+import com.simplevoting.menuvoting.config.WebConfig;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.EmbeddedDatabaseConnection;
@@ -16,7 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.annotation.PostConstruct;
 
-@ContextConfiguration(classes = {JpaConfig.class})
+@ContextConfiguration(classes = {JpaConfig.class, WebConfig.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
