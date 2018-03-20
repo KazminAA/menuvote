@@ -12,10 +12,17 @@ import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 @Configuration
 @EnableWebMvc
 public class WebConfig extends WebMvcConfigurerAdapter {
+
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:messages/app");
+        String baseNamePrefix = System.getenv("MENUVOTE_ROOT");
+        if (baseNamePrefix == null || baseNamePrefix.isEmpty()) {
+            baseNamePrefix = "classpath*:";
+        } else {
+            baseNamePrefix = new StringBuilder().append("file:///").append(baseNamePrefix).append("/").toString();
+        }
+        messageSource.setBasename(baseNamePrefix.concat("messages/app"));
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setFallbackToSystemLocale(false);
         return messageSource;
@@ -23,23 +30,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public LocaleResolver localeResolver() {
-
-        /*CookieAndHeadersLocaleResolver localeResolver = new CookieAndHeadersLocaleResolver();
-        localeResolver.setDefaultLocale(new Locale("en"));
-        localeResolver.setCookieName("localeCookie");
-        localeResolver.setCookieMaxAge(4800);*/
-        AcceptHeaderLocaleResolver localeResolver = new AcceptHeaderLocaleResolver();
-        return localeResolver;
+        return new AcceptHeaderLocaleResolver();
     }
-
-   /* public class CookieAndHeadersLocaleResolver extends CookieLocaleResolver {
-        @Override
-        public Locale resolveLocale(HttpServletRequest request) {
-            String acceptLanguage = request.getHeader("Accept-Language");
-            if (acceptLanguage == null || acceptLanguage.trim().isEmpty()) {
-                return super.determineDefaultLocale(request);
-            }
-            return request.getLocale();
-        }
-    }*/
 }
