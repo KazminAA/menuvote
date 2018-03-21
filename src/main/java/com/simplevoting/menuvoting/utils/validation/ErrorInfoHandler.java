@@ -1,6 +1,7 @@
 package com.simplevoting.menuvoting.utils.validation;
 
 import com.simplevoting.menuvoting.utils.MessageUtil;
+import com.simplevoting.menuvoting.utils.exception.EditClosedPeriodException;
 import com.simplevoting.menuvoting.utils.exception.ErrorInfo;
 import com.simplevoting.menuvoting.utils.exception.ErrorType;
 import com.simplevoting.menuvoting.utils.exception.NotFoundException;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import javax.servlet.http.HttpServletRequest;
 
 import static com.simplevoting.menuvoting.utils.exception.ErrorType.DATA_NOT_FOUND;
+import static com.simplevoting.menuvoting.utils.exception.ErrorType.EDIT_CLOSED_PERIOD_ERROR;
 import static com.simplevoting.menuvoting.utils.exception.ErrorType.VALIDATION_ERROR;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -31,12 +33,18 @@ public class ErrorInfoHandler {
     MessageUtil messageUtil;
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    @ExceptionHandler(NotFoundException.class)
-    public ErrorInfo notFoundErrorHandle(HttpServletRequest req, NotFoundException e) {
-        return logAndGetErrorInfo(req, e, false, DATA_NOT_FOUND, e.getLocalizedMessage());
+    @ExceptionHandler({NotFoundException.class, EditClosedPeriodException.class})
+    public ErrorInfo notFoundErrorHandle(HttpServletRequest req, Exception e) {
+        ErrorType type;
+        if (e instanceof NotFoundException) {
+            type = DATA_NOT_FOUND;
+        } else {
+            type = EDIT_CLOSED_PERIOD_ERROR;
+        }
+        return logAndGetErrorInfo(req, e, false, type, e.getLocalizedMessage());
     }
 
-    @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)  // 422
+    @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ErrorInfo bindValidationError(HttpServletRequest req, MethodArgumentNotValidException e) {
         BindingResult result = e.getBindingResult();

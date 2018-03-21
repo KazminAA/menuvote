@@ -12,10 +12,14 @@ public class LocaleSwitchTest extends AbstractControllerTest {
     @Test
     public void notFoundExceptionMessageTest() throws Exception {
         HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Accept-Language", "ru");
+        mockMvc.perform(get("/rest/menu/10015").headers(httpHeaders)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.details[0]").value("Not found entity with id=10015"));
+        httpHeaders.clear();
         httpHeaders.add("Accept-Language", "en");
         mockMvc.perform(get("/rest/menu/10015").headers(httpHeaders)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isUnprocessableEntity())
-                .andExpect(jsonPath("$.details[0]").value("Not found entity with id=10015"));
+                .andExpect(jsonPath("$.details[0]").value("Не найдена запись с id=10015"));
     }
 }
