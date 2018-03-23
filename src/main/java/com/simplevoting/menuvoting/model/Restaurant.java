@@ -21,15 +21,15 @@ public class Restaurant extends AbstractBaseEntity {
 
     @Column(name = "address")
     @Pattern(regexp = "[a-zа-я]{1,3}\\.[a-zA-Zа-яА-Я-]+\\,\\s\\d{1,3}[a-zа-я]?",
-            message = "must match the pattern: {1-3 letters}.{Name}, {number}[1-3 letters] (e.g. str.Summery, 5a)")
+            message = "Must match the pattern: {1-3 letters}.{Name}, {number}[1-3 letters] (e.g. str.Summery, 5a)")
     private String address;
 
     public Restaurant() {
     }
 
-    public Restaurant(Integer id, String name) {
-        super(id);
+    public Restaurant(String name, String address) {
         this.name = name;
+        this.address = address;
     }
 
     public Restaurant(Integer id, String name, String address) {
