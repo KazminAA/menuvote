@@ -20,8 +20,7 @@ public class Restaurant extends AbstractBaseEntity {
     private String name;
 
     @Column(name = "address")
-    @Pattern(regexp = "[a-zа-я]{1,3}\\.[a-zA-Zа-яА-Я-]+\\,\\s\\d{1,3}[a-zа-я]?",
-            message = "Must match the pattern: {1-3 letters}.{Name}, {number}[1-3 letters] (e.g. str.Summery, 5a)")
+    @Pattern(regexp = "[a-zа-я]{1,3}\\.[a-zA-Zа-яА-Я-]+\\,\\s\\d{1,3}[a-zа-я]?")
     private String address;
 
     public Restaurant() {
