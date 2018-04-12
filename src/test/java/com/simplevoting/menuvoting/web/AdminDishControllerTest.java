@@ -2,7 +2,7 @@ package com.simplevoting.menuvoting.web;
 
 import com.simplevoting.menuvoting.model.Dish;
 import com.simplevoting.menuvoting.service.DishService;
-import com.simplevoting.menuvoting.utils.JsonUtils;
+import com.simplevoting.menuvoting.utils.json.JsonUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

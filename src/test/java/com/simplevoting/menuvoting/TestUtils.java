@@ -1,12 +1,12 @@
 package com.simplevoting.menuvoting;
 
-import com.simplevoting.menuvoting.utils.JsonUtils;
+import com.simplevoting.menuvoting.utils.json.JsonUtils;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.io.UnsupportedEncodingException;
 
-import static com.simplevoting.menuvoting.utils.JsonUtils.wrightValue;
+import static com.simplevoting.menuvoting.utils.json.JsonUtils.wrightValue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 public class TestUtils {

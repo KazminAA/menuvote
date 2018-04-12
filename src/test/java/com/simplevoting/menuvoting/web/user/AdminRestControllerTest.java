@@ -4,7 +4,7 @@ import com.simplevoting.menuvoting.TestUtils;
 import com.simplevoting.menuvoting.model.Role;
 import com.simplevoting.menuvoting.model.User;
 import com.simplevoting.menuvoting.service.UserService;
-import com.simplevoting.menuvoting.utils.JsonUtils;
+import com.simplevoting.menuvoting.utils.json.JsonUtils;
 import com.simplevoting.menuvoting.utils.MessageUtil;
 import com.simplevoting.menuvoting.web.AbstractControllerTest;
 import org.junit.Test;

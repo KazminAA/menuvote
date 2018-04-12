@@ -2,7 +2,7 @@ package com.simplevoting.menuvoting.web.restaurant;
 
 import com.simplevoting.menuvoting.model.Restaurant;
 import com.simplevoting.menuvoting.service.RestaurantService;
-import com.simplevoting.menuvoting.utils.JsonUtils;
+import com.simplevoting.menuvoting.utils.json.JsonUtils;
 import com.simplevoting.menuvoting.web.AbstractControllerTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

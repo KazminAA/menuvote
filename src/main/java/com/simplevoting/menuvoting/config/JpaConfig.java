@@ -67,17 +67,6 @@ public class JpaConfig {
     }
 
     @Bean
-    @Primary
-    public ObjectMapper objectMapper(Jackson2ObjectMapperBuilder builder) {
-        return builder.dateFormat(new SimpleDateFormat("yyyy-MM-dd"))
-                .json().serializationInclusion(JsonInclude.Include.NON_NULL)
-                .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .modules(new JavaTimeModule())
-                .modules(new Hibernate5Module())
-                .build();
-    }
-
-    @Bean
     public JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory);
