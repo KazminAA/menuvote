@@ -4,8 +4,8 @@ import com.simplevoting.menuvoting.TestUtils;
 import com.simplevoting.menuvoting.model.Role;
 import com.simplevoting.menuvoting.model.User;
 import com.simplevoting.menuvoting.service.UserService;
-import com.simplevoting.menuvoting.utils.json.JsonUtils;
 import com.simplevoting.menuvoting.utils.MessageUtil;
+import com.simplevoting.menuvoting.utils.json.JsonUtils;
 import com.simplevoting.menuvoting.web.AbstractControllerTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Locale;
 
-import static com.simplevoting.menuvoting.TestUtils.contentJson;
+import static com.simplevoting.menuvoting.TestUtils.contentJsonWithIgnore;
 import static com.simplevoting.menuvoting.UserTestData.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -40,7 +41,7 @@ public class AdminRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 // https://jira.spring.io/browse/SPR-14472
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(ADMIN1));
+                .andExpect(contentJsonWithIgnore(ADMIN1, "votes"));
     }
 
     @Test
@@ -55,7 +56,7 @@ public class AdminRestControllerTest extends AbstractControllerTest {
         mockMvc.perform(get(REST_URL + "by?email=" + ADMIN1.getEmail()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(ADMIN1));
+                .andExpect(contentJsonWithIgnore(ADMIN1, "votes"));
     }
 
     @Test
@@ -63,7 +64,7 @@ public class AdminRestControllerTest extends AbstractControllerTest {
         mockMvc.perform(delete(REST_URL + USER1.getId()))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-        assertMatch(userService.getAll(), ADMIN1);
+        assertMatch(userService.getAll(), ADMIN1, USER2);
     }
 
     @Test
@@ -93,7 +94,7 @@ public class AdminRestControllerTest extends AbstractControllerTest {
         mockMvc.perform(put(REST_URL + USER1.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtils.wrightValue(updated)))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
         assertMatch(userService.get(USER1.getId()), updated);
     }
@@ -118,7 +119,7 @@ public class AdminRestControllerTest extends AbstractControllerTest {
         mockMvc.perform(get(REST_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(Arrays.asList(new User[]{ADMIN1, USER1, USER2})));
+                .andExpect(contentJsonWithIgnore(Arrays.asList(new User[]{ADMIN1, USER1, USER2}), "votes"));
     }
 
     @Test
@@ -148,12 +149,12 @@ public class AdminRestControllerTest extends AbstractControllerTest {
     public void testUpdateDuplicate() throws Exception {
         User updated = new User(USER1);
         updated.setEmail("admin@gmail.com");
-        mockMvc.perform(put(REST_URL + USER1)
+        mockMvc.perform(put(REST_URL + USER1.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtils.wrightValue(updated)))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.type").value("DATA_ERROR"))
-                .andExpect(jsonPath("$.details").value(messageUtil.getMessage("exception.user.duplicateEmail")))
+                .andExpect(jsonPath("$.details").value(messageUtil.getMessage("exception.user.duplicateEmail", new Locale("en"))))
                 .andDo(print());
     }
 
@@ -166,7 +167,7 @@ public class AdminRestControllerTest extends AbstractControllerTest {
                 .content(JsonUtils.wrightValue(expected)))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.type").value("DATA_ERROR"))
-                .andExpect(jsonPath("$.details").value(messageUtil.getMessage("exception.user.duplicateEmail")));
+                .andExpect(jsonPath("$.details").value(messageUtil.getMessage("exception.user.duplicateEmail", new Locale("en"))));
 
     }
 }

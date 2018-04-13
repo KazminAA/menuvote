@@ -2,6 +2,7 @@ package com.simplevoting.menuvoting.service.impl;
 
 import com.simplevoting.menuvoting.TimingRules;
 import com.simplevoting.menuvoting.config.JpaConfig;
+import com.simplevoting.menuvoting.config.WebConfig;
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -18,11 +19,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import static com.simplevoting.menuvoting.utils.validation.ValidationUtil.getRootCause;
 import static org.hamcrest.CoreMatchers.instanceOf;
 
-@ContextConfiguration(classes = {JpaConfig.class})
+@WebAppConfiguration
+@ContextConfiguration(classes = {WebConfig.class, JpaConfig.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:data.sql", config = @SqlConfig(encoding = "UTF-8"))

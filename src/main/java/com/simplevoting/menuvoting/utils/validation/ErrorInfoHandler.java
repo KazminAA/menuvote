@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,9 +20,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.simplevoting.menuvoting.utils.exception.ErrorType.DATA_NOT_FOUND;
-import static com.simplevoting.menuvoting.utils.exception.ErrorType.EDIT_CLOSED_PERIOD_ERROR;
-import static com.simplevoting.menuvoting.utils.exception.ErrorType.VALIDATION_ERROR;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import static com.simplevoting.menuvoting.utils.exception.ErrorType.*;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @RestControllerAdvice(annotations = RestController.class)
@@ -29,8 +33,16 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class ErrorInfoHandler {
     private static final Logger log = getLogger(ErrorInfoHandler.class);
 
+    private static final Map<String, String> CONSTRAINTS_I18N = Collections.unmodifiableMap(
+            new HashMap<String, String>() {
+                {
+                    put("USERS_UNIQUE_EMAIL_IDX", "exception.user.duplicateEmail");
+                }
+            }
+    );
+
     @Autowired
-    MessageUtil messageUtil;
+    private MessageUtil messageUtil;
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler({NotFoundException.class, EditClosedPeriodException.class})
@@ -54,6 +66,21 @@ public class ErrorInfoHandler {
                 .toArray(String[]::new);
 
         return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR, details);
+    }
+
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ErrorInfo dataIntegrityViolation(HttpServletRequest req, DataIntegrityViolationException e) {
+        String msg = ValidationUtil.getRootCause(e).getMessage();
+        if (msg != null) {
+            Optional<Map.Entry<String, String>> entry = CONSTRAINTS_I18N.entrySet().stream()
+                    .filter(entry1 -> msg.contains(entry1.getKey()))
+                    .findAny();
+            if (entry.isPresent()) {
+                return logAndGetErrorInfo(req, e, false, DATA_ERROR, messageUtil.getMessage(entry.get().getValue()));
+            }
+        }
+        return logAndGetErrorInfo(req, e, true, DATA_ERROR);
     }
 
     private ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, ErrorType errorType, String... details) {
