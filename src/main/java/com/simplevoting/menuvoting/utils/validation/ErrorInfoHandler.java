@@ -37,6 +37,9 @@ public class ErrorInfoHandler {
             new HashMap<String, String>() {
                 {
                     put("USERS_UNIQUE_EMAIL_IDX", "exception.user.duplicateEmail");
+                    put("RESTAURANT_NAME_IDX", "exception.restaurant.duplicate");
+                    put("DISH_NAME_IDX", "exception.dish.duplicate");
+                    put("MENU_DATE_RESTAURANT_IDX", "exception.menu.duplicate");
                 }
             }
     );

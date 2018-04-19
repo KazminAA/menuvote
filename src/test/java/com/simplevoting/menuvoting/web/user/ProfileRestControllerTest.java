@@ -4,7 +4,6 @@ import com.simplevoting.menuvoting.AuthorizedUser;
 import com.simplevoting.menuvoting.model.User;
 import com.simplevoting.menuvoting.service.UserService;
 import com.simplevoting.menuvoting.to.UserTo;
-import com.simplevoting.menuvoting.utils.MessageUtil;
 import com.simplevoting.menuvoting.utils.UserUtil;
 import com.simplevoting.menuvoting.utils.json.JsonUtils;
 import com.simplevoting.menuvoting.web.AbstractControllerTest;
@@ -13,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Locale;
 
 import static com.simplevoting.menuvoting.TestUtils.contentJson;
 import static com.simplevoting.menuvoting.UserTestData.*;
@@ -28,9 +25,6 @@ public class ProfileRestControllerTest extends AbstractControllerTest {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private MessageUtil messageUtil;
 
     @Test
     public void testGet() throws Exception {
@@ -86,7 +80,7 @@ public class ProfileRestControllerTest extends AbstractControllerTest {
                 .content(JsonUtils.wrightValue(updatedTo)))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.type").value("DATA_ERROR"))
-                .andExpect(jsonPath("$.details").value(messageUtil.getMessage("exception.user.duplicateEmail", new Locale("en"))))
+                .andExpect(jsonPath("$.details").value("User with this email already exists"))
                 .andDo(print());
     }
 }

@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.simplevoting.menuvoting.DishTestData.*;
 import static com.simplevoting.menuvoting.TestUtils.contentJson;
@@ -72,5 +74,17 @@ public class AdminDishControllerTest extends AbstractControllerTest {
     public void testDelete() throws Exception {
         mockMvc.perform(delete(REST_URL + DISH1.getId()));
         assertMatch(dishService.getAll(), DISH5, DISH6, DISH4, DISH7, DISH3, DISH8, DISH2);
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NEVER)
+    public void testDuplicate() throws Exception {
+        Dish duplicate = new Dish(DISH8.getName(), "Duplicate");
+        mockMvc.perform(post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtils.wrightValue(duplicate)))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.type").value("DATA_ERROR"))
+                .andExpect(jsonPath("$.details").value("Dish with this name already exists"));
     }
 }

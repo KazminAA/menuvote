@@ -5,7 +5,9 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import static com.simplevoting.menuvoting.utils.json.JsonUtils.wrightIgnoreProps;
 import static com.simplevoting.menuvoting.utils.json.JsonUtils.wrightValue;
@@ -31,5 +33,18 @@ public class TestUtils {
 
     public static <T> T readFromJson(ResultActions action, Class<T> tClass) throws UnsupportedEncodingException {
         return JsonUtils.readValue(getContent(action), tClass);
+    }
+
+    public static <T> T readFromJsonTrimFields(ResultActions action, Class<T> tClass, String... fieldsToTrim) throws UnsupportedEncodingException {
+        String jsonObj = Arrays.stream(getContent(action).split(","))
+                .map(str -> {
+                    if (Arrays.stream(fieldsToTrim).filter(tr -> str.contains(tr)).findAny().isPresent()) {
+                        return str.contains("}") ? "}" : "";
+                    }
+                    return str;
+                })
+                .collect(Collectors.joining(","));
+        jsonObj = jsonObj.replaceAll(",}", "}");
+        return JsonUtils.readValue(jsonObj, tClass);
     }
 }

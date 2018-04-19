@@ -3,7 +3,10 @@ package com.simplevoting.menuvoting.config;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.format.Formatter;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.LocaleResolver;
@@ -11,12 +14,17 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 import static com.simplevoting.menuvoting.utils.json.JsonObjectMapper.getObjectMapper;
 
 @Configuration
 @EnableWebMvc
+@Import({JpaConfig.class, SecurityConfig.class})
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Bean
@@ -44,5 +52,25 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean
     public LocaleResolver localeResolver() {
         return new AcceptHeaderLocaleResolver();
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addFormatter(localDateFormatter());
+        super.addFormatters(registry);
+    }
+
+    public Formatter<LocalDate> localDateFormatter() {
+        return new Formatter<LocalDate>() {
+            @Override
+            public LocalDate parse(String text, Locale locale) throws ParseException {
+                return LocalDate.parse(text);
+            }
+
+            @Override
+            public String print(LocalDate object, Locale locale) {
+                return DateTimeFormatter.ISO_DATE.format(object);
+            }
+        };
     }
 }

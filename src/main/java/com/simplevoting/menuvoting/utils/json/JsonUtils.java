@@ -1,6 +1,5 @@
 package com.simplevoting.menuvoting.utils.json;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -13,10 +12,6 @@ import java.util.stream.Collectors;
 import static com.simplevoting.menuvoting.utils.json.JsonObjectMapper.getObjectMapper;
 
 public class JsonUtils {
-
-    static {
-        getObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
-    }
 
     public static <T> String wrightValue(T obj) {
         try {

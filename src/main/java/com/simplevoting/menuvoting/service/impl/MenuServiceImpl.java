@@ -36,6 +36,16 @@ public class MenuServiceImpl implements MenuService {
         return repository.save(menu);
     }
 
+/*    @Override
+    public Menu addDish(Integer menuId, DishTo[] dishesToAdd) {
+        Menu menu = get(menuId);
+        Arrays.stream(dishesToAdd).forEach(dishTo -> {
+            MenuDish newMD = new MenuDish(menu, dishTo.getDish(), dishTo.getPrice());
+            menu.getDishes().add(newMD);
+        });
+        return update(menu);
+    }*/
+
     @Override
     public void delete(int id) throws NotFoundException {
         checkNotFoundWithId(repository.delete(id), id);

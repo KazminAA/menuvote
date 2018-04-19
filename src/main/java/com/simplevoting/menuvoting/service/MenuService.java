@@ -14,6 +14,8 @@ public interface MenuService {
 
     Menu update(Menu menu);
 
+    /*Menu addDish(Integer menuId, DishTo[] dishesToAdd);*/
+
     void delete(int id) throws NotFoundException;
 
     Menu get(int id) throws NotFoundException;
