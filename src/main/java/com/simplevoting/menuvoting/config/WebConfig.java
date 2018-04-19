@@ -1,10 +1,12 @@
 package com.simplevoting.menuvoting.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.format.Formatter;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -26,6 +28,9 @@ import static com.simplevoting.menuvoting.utils.json.JsonObjectMapper.getObjectM
 @EnableWebMvc
 @Import({JpaConfig.class, SecurityConfig.class})
 public class WebConfig extends WebMvcConfigurerAdapter {
+
+    @Autowired
+    private Environment env;
 
     @Bean
     public MessageSource messageSource() {
@@ -64,12 +69,12 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return new Formatter<LocalDate>() {
             @Override
             public LocalDate parse(String text, Locale locale) throws ParseException {
-                return LocalDate.parse(text);
+                return LocalDate.parse(text, DateTimeFormatter.ofPattern(env.getProperty("spring.jackson.date-format")));
             }
 
             @Override
             public String print(LocalDate object, Locale locale) {
-                return DateTimeFormatter.ISO_DATE.format(object);
+                return DateTimeFormatter.ofPattern(env.getProperty("spring.jackson.date-format")).format(object);
             }
         };
     }
