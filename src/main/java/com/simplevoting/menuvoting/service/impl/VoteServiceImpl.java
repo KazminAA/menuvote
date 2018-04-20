@@ -7,6 +7,7 @@ import com.simplevoting.menuvoting.utils.MessageUtil;
 import com.simplevoting.menuvoting.utils.exception.EditClosedPeriodException;
 import com.simplevoting.menuvoting.utils.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -31,19 +32,23 @@ public class VoteServiceImpl implements VoteService {
     @Override
     public Vote create(Vote vote, int user_id) {
         checkVote(vote, user_id);
+        if (voteRepository.checkVote(vote.getDate(), vote.getUserId()))
+            throw new DataIntegrityViolationException("VOTE_DATE_USER_IDX");
         return voteRepository.save(vote);
     }
 
     @Override
     public void update(Vote vote, int user_id) throws EditClosedPeriodException, NotFoundException {
         checkVote(vote, user_id);
-        if (checkPeriod(vote.getDate())) throw new EditClosedPeriodException();
+        if (checkPeriod(vote.getDate())) throw new EditClosedPeriodException(
+                messageUtil.getMessage("exception.voteDate.closed", vote.getDate().toString()));
         voteRepository.save(vote);
     }
 
     @Override
     public void delete(LocalDate date, int user_id) throws EditClosedPeriodException, NotFoundException {
-        if (checkPeriod(date)) throw new EditClosedPeriodException();
+        if (checkPeriod(date)) throw new EditClosedPeriodException(
+                messageUtil.getMessage("exception.voteDate.closed", date.toString()));
         checkNotFoundWithId(voteRepository.delete(date, user_id), user_id);
     }
 

@@ -72,7 +72,8 @@ CREATE TABLE votes
   date    DATE DEFAULT now() NOT NULL,
   user_id INTEGER            NOT NULL,
   menu_id INTEGER            NOT NULL,
-  CONSTRAINT date_user_idx UNIQUE (date, user_id),
   FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
   FOREIGN KEY (menu_id) REFERENCES menus (id) ON DELETE CASCADE
-)
+);
+CREATE UNIQUE INDEX date_user_idx
+  ON votes (date, user_id);

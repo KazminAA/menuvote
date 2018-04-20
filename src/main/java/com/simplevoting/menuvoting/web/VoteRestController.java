@@ -1,13 +1,10 @@
 package com.simplevoting.menuvoting.web;
 
 import com.simplevoting.menuvoting.AuthorizedUser;
-import com.simplevoting.menuvoting.model.Menu;
-import com.simplevoting.menuvoting.model.User;
 import com.simplevoting.menuvoting.model.Vote;
-import com.simplevoting.menuvoting.service.MenuService;
-import com.simplevoting.menuvoting.service.UserService;
 import com.simplevoting.menuvoting.service.VoteService;
 import com.simplevoting.menuvoting.to.VoteTo;
+import com.simplevoting.menuvoting.utils.VoteUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,22 +23,18 @@ public class VoteRestController {
     private static final Logger log = getLogger(VoteRestController.class);
 
     private final VoteService voteService;
-    private final MenuService menuService;
-    private final UserService userService;
+    private final VoteUtils voteUtils;
 
     @Autowired
-    public VoteRestController(VoteService voteService, MenuService menuService, UserService userService) {
+    public VoteRestController(VoteService voteService, VoteUtils voteUtils) {
         this.voteService = voteService;
-        this.menuService = menuService;
-        this.userService = userService;
+        this.voteUtils = voteUtils;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Vote> create(@RequestParam("menu_id") int menu_id) {
-        Menu menu = menuService.get(menu_id);
-        User user = userService.get(AuthorizedUser.id());
-        Vote vote = new Vote(menu.getDate(), user, menu);
+        Vote vote = voteUtils.getVote(menu_id, AuthorizedUser.id());
         log.info("create {}", vote);
         vote = voteService.create(vote, AuthorizedUser.id());
         return ResponseEntity.ok(vote);
@@ -50,9 +43,7 @@ public class VoteRestController {
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestBody VoteTo voteTo) {
-        Vote vote = new Vote(voteTo.getDate(),
-                userService.get(voteTo.getUserId()),
-                menuService.get(voteTo.getMenu_id()));
+        Vote vote = voteUtils.getFromTo(voteTo);
         log.info("update {}", vote);
         voteService.update(vote, AuthorizedUser.id());
     }

@@ -40,6 +40,7 @@ public class ErrorInfoHandler {
                     put("RESTAURANT_NAME_IDX", "exception.restaurant.duplicate");
                     put("DISH_NAME_IDX", "exception.dish.duplicate");
                     put("MENU_DATE_RESTAURANT_IDX", "exception.menu.duplicate");
+                    put("VOTE_DATE_USER_IDX", "exception.vote.duplicate");
                 }
             }
     );
