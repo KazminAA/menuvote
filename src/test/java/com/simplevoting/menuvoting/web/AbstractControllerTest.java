@@ -1,10 +1,12 @@
 package com.simplevoting.menuvoting.web;
 
 import com.simplevoting.menuvoting.config.WebConfig;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.cache.CacheManager;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -28,11 +30,20 @@ abstract public class AbstractControllerTest {
     protected MockMvc mockMvc;
     @Autowired
     private WebApplicationContext webApplicationContext;
+    @Autowired
+    private CacheManager cacheManager;
 
     @PostConstruct
     private void postConstruct() {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(webApplicationContext)
                 .build();
+    }
+
+    @Before
+    public void setUp() {
+        cacheManager.getCache("users").clear();
+        cacheManager.getCache("dishes").clear();
+        cacheManager.getCache("restaurants").clear();
     }
 }

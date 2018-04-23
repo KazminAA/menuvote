@@ -1,6 +1,7 @@
 package com.simplevoting.menuvoting.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ import java.util.*;
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")
 })
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class User extends AbstractBaseEntity {
     @Column(name = "name", nullable = false)
     @NotBlank

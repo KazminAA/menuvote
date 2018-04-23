@@ -1,5 +1,8 @@
 package com.simplevoting.menuvoting.model;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -12,6 +15,7 @@ import java.util.Objects;
 @Table(name = "dishes", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"name"}, name = "dish_name_idx")
 })
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Dish extends AbstractBaseEntity {
     @Column(name = "name", nullable = false)
     @NotBlank
