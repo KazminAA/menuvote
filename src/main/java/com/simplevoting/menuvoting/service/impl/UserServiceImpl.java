@@ -1,15 +1,19 @@
 package com.simplevoting.menuvoting.service.impl;
 
+import com.simplevoting.menuvoting.AuthorizedUser;
 import com.simplevoting.menuvoting.model.User;
 import com.simplevoting.menuvoting.repository.UserRepository;
 import com.simplevoting.menuvoting.service.UserService;
 import com.simplevoting.menuvoting.to.UserTo;
+import com.simplevoting.menuvoting.utils.MessageUtil;
 import com.simplevoting.menuvoting.utils.UserUtil;
 import com.simplevoting.menuvoting.utils.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -21,13 +25,15 @@ import static com.simplevoting.menuvoting.utils.validation.ValidationUtil.checkN
 
 @Service
 @CacheConfig(cacheNames = "users")
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository repository;
+    private final MessageUtil messageUtil;
 
     @Autowired
-    public UserServiceImpl(UserRepository repository) {
+    public UserServiceImpl(UserRepository repository, MessageUtil messageUtil) {
         this.repository = repository;
+        this.messageUtil = messageUtil;
     }
 
     @CacheEvict(allEntries = true)
@@ -85,5 +91,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getWithVotes(int id) {
         return checkNotFoundWithId(repository.getWithVotes(id), id);
+    }
+
+    @Override
+    public AuthorizedUser loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = repository.getByEmail(email.toLowerCase());
+        if (user == null) throw new UsernameNotFoundException(messageUtil.getMessage("exception.user.notFound", email));
+        return new AuthorizedUser(user);
     }
 }
