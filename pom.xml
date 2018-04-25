@@ -25,6 +25,7 @@
         <h2.database>1.4.196</h2.database>
         <jackson-core>2.9.5</jackson-core>
         <hibernate.version>5.2.16.Final</hibernate.version>
+        <spring.security.core>5.0.4.RELEASE</spring.security.core>
     </properties>
 
     <dependencies>
@@ -83,6 +84,11 @@
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>${jackson-core}</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>5.0.0.RELEASE</version>
+        </dependency>
 
     </dependencies>
 
@@ -94,6 +100,12 @@
                 <artifactId>hibernate-core</artifactId>
                 <version>${hibernate.version}</version>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-core</artifactId>
+                <version>${spring.security.core}</version>
             </dependency>
 
             <dependency>

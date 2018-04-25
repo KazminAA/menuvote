@@ -35,8 +35,8 @@ public class AdminMenuRestControllerTest extends AbstractControllerTest {
         Menu created = new Menu(LocalDate.now(), RESTAURANT2);
         ResultActions action = mockMvc.perform(post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtils.wrightIgnoreProps(created, "total")));
-        Menu returned = TestUtils.readFromJsonTrimFields(action, Menu.class, "total");
+                .content(JsonUtils.wrightValue(created)));
+        Menu returned = TestUtils.readFromJson(action, Menu.class);
         created.setId(returned.getId());
         assertMatch(created, returned);
         assertMatch(menuService.getAll(), created, MENU5, MENU4, MENU6, MENU1, MENU2, MENU3);
@@ -48,7 +48,7 @@ public class AdminMenuRestControllerTest extends AbstractControllerTest {
         Menu duplicate = new Menu(MENU6.getDate(), MENU6.getRestaurant());
         mockMvc.perform(post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtils.wrightIgnoreProps(duplicate, "total")))
+                .content(JsonUtils.wrightValue(duplicate)))
                 .andExpect(status().isConflict())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.type").value("DATA_ERROR"))
@@ -63,7 +63,7 @@ public class AdminMenuRestControllerTest extends AbstractControllerTest {
         updated.getDishes().add(dish);
         mockMvc.perform(put(REST_URL + updated.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtils.wrightIgnoreProps(updated, "total")));
+                .content(JsonUtils.wrightValue(updated)));
         assertMatch(menuService.getAll(), updated, MENU5, MENU4, MENU1, MENU2, MENU3);
     }
 

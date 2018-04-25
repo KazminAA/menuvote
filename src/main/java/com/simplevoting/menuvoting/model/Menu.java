@@ -92,10 +92,6 @@ public class Menu extends AbstractBaseEntity {
         this.votes = votes;
     }
 
-    public int getTotal() {
-        return this.votes.size();
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
