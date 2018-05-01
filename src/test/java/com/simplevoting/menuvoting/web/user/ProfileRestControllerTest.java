@@ -13,7 +13,9 @@ import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.simplevoting.menuvoting.TestUtils.authUser;
 import static com.simplevoting.menuvoting.TestUtils.contentJson;
+import static com.simplevoting.menuvoting.TestUtils.contentJsonWithIgnore;
 import static com.simplevoting.menuvoting.UserTestData.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -28,7 +30,8 @@ public class ProfileRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGet() throws Exception {
-        mockMvc.perform(get(REST_URL))
+        mockMvc.perform(get(REST_URL)
+                .with(authUser(USER1)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(contentJson(USER1));
@@ -42,17 +45,20 @@ public class ProfileRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testDelete() throws Exception {
-        mockMvc.perform(delete(REST_URL))
+        mockMvc.perform(delete(REST_URL)
+                .with(authUser(USER1)))
                 .andExpect(status().isNoContent());
         assertMatch(userService.getAll(), ADMIN1, USER2);
     }
 
     @Test
     public void testUpdate() throws Exception {
-        UserTo updatedTo = new UserTo(null, "newName", "newemail@ya.ru", "newPassword");
+        UserTo updatedTo = new UserTo(USER1.getId(), "newName", "newemail@ya.ru", "newPassword");
 
-        mockMvc.perform(put(REST_URL).contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtils.wrightValue(updatedTo)))
+        mockMvc.perform(put(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtils.wrightValue(updatedTo))
+                .with(authUser(USER1)))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -61,9 +67,11 @@ public class ProfileRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testUpdateInvalid() throws Exception {
-        UserTo updatedTo = new UserTo(AuthorizedUser.id(), null, "password", null);
+        UserTo updatedTo = new UserTo(USER1.getId(), null, "password", null);
 
-        mockMvc.perform(put(REST_URL).contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(put(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(authUser(USER1))
                 .content(JsonUtils.wrightValue(updatedTo)))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
@@ -77,7 +85,8 @@ public class ProfileRestControllerTest extends AbstractControllerTest {
         UserTo updatedTo = new UserTo(null, "newName", "admin@gmail.com", "newPassword");
 
         mockMvc.perform(put(REST_URL).contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtils.wrightValue(updatedTo)))
+                .content(JsonUtils.wrightValue(updatedTo))
+                .with(authUser(USER1)))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.type").value("DATA_ERROR"))
                 .andExpect(jsonPath("$.details").value("User with this email already exists"))

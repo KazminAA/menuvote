@@ -10,7 +10,9 @@ import org.springframework.http.MediaType;
 import java.util.Arrays;
 
 import static com.simplevoting.menuvoting.RestaurantTestData.*;
+import static com.simplevoting.menuvoting.TestUtils.authUser;
 import static com.simplevoting.menuvoting.TestUtils.contentJson;
+import static com.simplevoting.menuvoting.UserTestData.USER1;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -24,7 +26,7 @@ public class RestaurantRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGetAll() throws Exception {
-        mockMvc.perform(get(REST_URL))
+        mockMvc.perform(get(REST_URL).with(authUser(USER1)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(contentJson(Arrays.asList(new Restaurant[]{RESTAURANT1, RESTAURANT2, RESTAURANT3})));
@@ -32,7 +34,8 @@ public class RestaurantRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGet() throws Exception {
-        mockMvc.perform(get(REST_URL + RESTAURANT2.getId()))
+        mockMvc.perform(get(REST_URL + RESTAURANT2.getId())
+                .with(authUser(USER1)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(contentJson(RESTAURANT2));
@@ -40,7 +43,8 @@ public class RestaurantRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGetNotFound() throws Exception {
-        mockMvc.perform(get(REST_URL + "1"))
+        mockMvc.perform(get(REST_URL + "1")
+                .with(authUser(USER1)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.type").value("DATA_NOT_FOUND"));

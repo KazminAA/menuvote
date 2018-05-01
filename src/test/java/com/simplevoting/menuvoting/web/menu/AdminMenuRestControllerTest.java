@@ -18,6 +18,8 @@ import java.time.LocalDate;
 import static com.simplevoting.menuvoting.DishTestData.DISH2;
 import static com.simplevoting.menuvoting.MenuTestData.*;
 import static com.simplevoting.menuvoting.RestaurantTestData.RESTAURANT2;
+import static com.simplevoting.menuvoting.TestUtils.authUser;
+import static com.simplevoting.menuvoting.UserTestData.ADMIN1;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -35,7 +37,8 @@ public class AdminMenuRestControllerTest extends AbstractControllerTest {
         Menu created = new Menu(LocalDate.now(), RESTAURANT2);
         ResultActions action = mockMvc.perform(post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtils.wrightValue(created)));
+                .content(JsonUtils.wrightValue(created))
+                .with(authUser(ADMIN1)));
         Menu returned = TestUtils.readFromJson(action, Menu.class);
         created.setId(returned.getId());
         assertMatch(created, returned);
@@ -48,7 +51,8 @@ public class AdminMenuRestControllerTest extends AbstractControllerTest {
         Menu duplicate = new Menu(MENU6.getDate(), MENU6.getRestaurant());
         mockMvc.perform(post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtils.wrightValue(duplicate)))
+                .content(JsonUtils.wrightValue(duplicate))
+                .with(authUser(ADMIN1)))
                 .andExpect(status().isConflict())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.type").value("DATA_ERROR"))
@@ -63,7 +67,8 @@ public class AdminMenuRestControllerTest extends AbstractControllerTest {
         updated.getDishes().add(dish);
         mockMvc.perform(put(REST_URL + updated.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtils.wrightValue(updated)));
+                .content(JsonUtils.wrightValue(updated))
+                .with(authUser(ADMIN1)));
         assertMatch(menuService.getAll(), updated, MENU5, MENU4, MENU1, MENU2, MENU3);
     }
 
@@ -73,7 +78,8 @@ public class AdminMenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testDelete() throws Exception {
-        mockMvc.perform(delete(REST_URL + MENU4.getId()));
+        mockMvc.perform(delete(REST_URL + MENU4.getId())
+                .with(authUser(ADMIN1)));
         assertMatch(menuService.getAll(), MENU5, MENU6, MENU1, MENU2, MENU3);
     }
 }

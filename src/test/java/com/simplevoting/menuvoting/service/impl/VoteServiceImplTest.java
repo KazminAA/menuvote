@@ -15,7 +15,7 @@ import static com.simplevoting.menuvoting.UserTestData.USER1;
 import static com.simplevoting.menuvoting.UserTestData.USER2;
 import static com.simplevoting.menuvoting.VoteTestData.*;
 
-public class VoteServiceImplTest extends AbstractServiceTest {
+public class VoteServiceImplTest extends AbstractWebAppTest {
     @Autowired
     VoteService voteService;
 

@@ -19,7 +19,7 @@ import static com.simplevoting.menuvoting.UserTestData.assertMatch;
 import static com.simplevoting.menuvoting.VoteTestData.*;
 import static com.simplevoting.menuvoting.VoteTestData.assertMatch;
 
-public class UserServiceImplTest extends AbstractServiceTest {
+public class UserServiceImplTest extends AbstractWebAppTest {
     @Autowired
     private UserService service;
 

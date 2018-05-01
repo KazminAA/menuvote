@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -30,12 +31,12 @@ public class JsonUtils {
     }
 
     private static <T> Map<String, Object> mapWithIgnore(T obj, String[] propsToIgnore) {
-        Map<String, Object> result = getObjectMapper().convertValue(obj, new TypeReference<Map<String, Object>>() {
+        Map<String, Object> map = getObjectMapper().convertValue(obj, new TypeReference<Map<String, Object>>() {
         });
         for (String prop : propsToIgnore) {
-            result.remove(prop);
+            map.remove(prop);
         }
-        return result;
+        return map;
     }
 
     public static <T> String wrightIgnoreProps(T obj, String... propsToIgnore) {
@@ -49,4 +50,16 @@ public class JsonUtils {
                 .collect(Collectors.toList());
         return wrightValue(list);
     }
+
+    public static <T> String wrightAdditionProps(T obj, String prop, Object value) {
+        return wrightAdditionProps(obj, Collections.singletonMap(prop, value));
+    }
+
+    public static <T> String wrightAdditionProps(T obj, Map<String, Object> addProps) {
+        Map<String, Object> map = getObjectMapper().convertValue(obj, new TypeReference<Map<String, Object>>() {
+        });
+        map.putAll(addProps);
+        return wrightValue(map);
+    }
+
 }

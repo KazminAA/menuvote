@@ -1,8 +1,11 @@
 package com.simplevoting.menuvoting;
 
+import com.simplevoting.menuvoting.model.User;
 import com.simplevoting.menuvoting.utils.json.JsonUtils;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
@@ -46,5 +49,9 @@ public class TestUtils {
                 .collect(Collectors.joining(","));
         jsonObj = jsonObj.replaceAll(",}", "}");
         return JsonUtils.readValue(jsonObj, tClass);
+    }
+
+    public static RequestPostProcessor authUser(User user) {
+        return SecurityMockMvcRequestPostProcessors.httpBasic(user.getEmail(), user.getPassword());
     }
 }

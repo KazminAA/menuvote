@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.simplevoting.menuvoting.MenuTestData.MENU1;
 import static com.simplevoting.menuvoting.MenuTestData.MENU2;
 import static com.simplevoting.menuvoting.MenuTestData.MENU6;
+import static com.simplevoting.menuvoting.TestUtils.authUser;
 import static com.simplevoting.menuvoting.UserTestData.USER1;
 import static com.simplevoting.menuvoting.VoteTestData.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -37,7 +38,8 @@ public class VoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testCreate() throws Exception {
-        ResultActions resultAction = mockMvc.perform(post(REST_URL + "?menu_id=" + MENU6.getId()));
+        ResultActions resultAction = mockMvc.perform(post(REST_URL + "?menu_id=" + MENU6.getId())
+                .with(authUser(USER1)));
         Vote created = voteUtils.getFromTo(TestUtils.readFromJson(resultAction, VoteTo.class));
         assertMatch(voteService.getAll(), created, VOTE4, VOTE5, VOTE1, VOTE2, VOTE3);
     }
@@ -45,7 +47,8 @@ public class VoteRestControllerTest extends AbstractControllerTest {
     @Test
     @Transactional(propagation = Propagation.NEVER)
     public void testCreateDuplicate() throws Exception {
-        mockMvc.perform(post(REST_URL + "?=menu_id=" + MENU2.getId()))
+        mockMvc.perform(post(REST_URL + "?=menu_id=" + MENU2.getId())
+                .with(authUser(USER1)))
                 .andExpect(status().isConflict())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.type").value("DATA_ERROR"))
@@ -59,7 +62,8 @@ public class VoteRestControllerTest extends AbstractControllerTest {
         created.setMenu(MENU1);
         mockMvc.perform(put(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtils.wrightValue(created)));
+                .content(JsonUtils.wrightValue(created))
+                .with(authUser(USER1)));
         assertMatch(voteService.getAll(), created, VOTE4, VOTE5, VOTE1, VOTE2, VOTE3);
     }
 
@@ -69,7 +73,8 @@ public class VoteRestControllerTest extends AbstractControllerTest {
         updated.setMenu(MENU1);
         mockMvc.perform(put(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtils.wrightValue(updated)))
+                .content(JsonUtils.wrightValue(updated))
+                .with(authUser(USER1)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.type").value("EDIT_CLOSED_PERIOD_ERROR"))
@@ -80,13 +85,15 @@ public class VoteRestControllerTest extends AbstractControllerTest {
     public void testDelete() throws Exception {
         Vote created = voteService.create(getNewTomorrowVote(), USER1.getId());
         assertMatch(voteService.getAll(), created, VOTE4, VOTE5, VOTE1, VOTE2, VOTE3);
-        mockMvc.perform(delete(REST_URL + created.getDate().toString()));
+        mockMvc.perform(delete(REST_URL + created.getDate().toString())
+                .with(authUser(USER1)));
         assertMatch(voteService.getAll(), VOTE4, VOTE5, VOTE1, VOTE2, VOTE3);
     }
 
     @Test
     public void testDeleteOnClosedPeriod() throws Exception {
-        mockMvc.perform(delete(REST_URL + VOTE1.getDate().toString()))
+        mockMvc.perform(delete(REST_URL + VOTE1.getDate().toString())
+                .with(authUser(USER1)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.type").value("EDIT_CLOSED_PERIOD_ERROR"))
@@ -95,10 +102,11 @@ public class VoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testDeleteNotFound() throws Exception {
-        mockMvc.perform(delete(REST_URL + getNewTomorrowVote().getDate().toString()))
+        mockMvc.perform(delete(REST_URL + getNewTomorrowVote().getDate().toString())
+                .with(authUser(USER1)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.type").value("DATA_NOT_FOUND"))
-                .andExpect(jsonPath("$.details").value("Not found entity with id=" + AuthorizedUser.id()));
+                .andExpect(jsonPath("$.details").value("Not found entity with id=" + USER1.getId()));
     }
 }

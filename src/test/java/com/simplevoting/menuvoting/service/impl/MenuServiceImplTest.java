@@ -22,7 +22,7 @@ import static com.simplevoting.menuvoting.VoteTestData.assertMatch;
 import static com.simplevoting.menuvoting.utils.DateTimeUtils.MAX_DATE;
 import static com.simplevoting.menuvoting.utils.DateTimeUtils.MIN_DATE;
 
-public class MenuServiceImplTest extends AbstractServiceTest {
+public class MenuServiceImplTest extends AbstractWebAppTest {
 
     @Autowired
     MenuService service;

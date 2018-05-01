@@ -11,7 +11,7 @@ import java.util.List;
 
 import static com.simplevoting.menuvoting.RestaurantTestData.*;
 
-public class RestaurantServiceImplTest extends AbstractServiceTest {
+public class RestaurantServiceImplTest extends AbstractWebAppTest {
     @Autowired
     RestaurantService service;
 

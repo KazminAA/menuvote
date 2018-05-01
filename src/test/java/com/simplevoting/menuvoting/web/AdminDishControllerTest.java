@@ -11,8 +11,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.simplevoting.menuvoting.DishTestData.*;
+import static com.simplevoting.menuvoting.TestUtils.authUser;
 import static com.simplevoting.menuvoting.TestUtils.contentJson;
 import static com.simplevoting.menuvoting.TestUtils.readFromJson;
+import static com.simplevoting.menuvoting.UserTestData.ADMIN1;
+import static com.simplevoting.menuvoting.UserTestData.USER1;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -25,7 +28,8 @@ public class AdminDishControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGetAll() throws Exception {
-        mockMvc.perform(get(REST_URL))
+        mockMvc.perform(get(REST_URL)
+                .with(authUser(ADMIN1)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(contentJson(DISH_LIST));
@@ -33,7 +37,8 @@ public class AdminDishControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGet() throws Exception {
-        mockMvc.perform(get(REST_URL + DISH4.getId()))
+        mockMvc.perform(get(REST_URL + DISH4.getId())
+                .with(authUser(ADMIN1)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(contentJson(DISH4));
@@ -41,7 +46,8 @@ public class AdminDishControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGetNotFound() throws Exception {
-        mockMvc.perform(get(REST_URL + "15"))
+        mockMvc.perform(get(REST_URL + "15")
+                .with(authUser(ADMIN1)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.type").value("DATA_NOT_FOUND"));
@@ -52,7 +58,8 @@ public class AdminDishControllerTest extends AbstractControllerTest {
         Dish created = new Dish("Created dish", "just for test");
         ResultActions action = mockMvc.perform(post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtils.wrightValue(created)));
+                .content(JsonUtils.wrightValue(created))
+                .with(authUser(ADMIN1)));
         Dish returned = readFromJson(action, Dish.class);
         created.setId(returned.getId());
         assertMatch(returned, created);
@@ -66,13 +73,15 @@ public class AdminDishControllerTest extends AbstractControllerTest {
         updated.setDescription("just for test");
         mockMvc.perform(put(REST_URL + DISH4.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtils.wrightValue(updated)));
+                .content(JsonUtils.wrightValue(updated))
+                .with(authUser(ADMIN1)));
         assertMatch(dishService.getAll(), updated, DISH5, DISH6, DISH7, DISH1, DISH3, DISH8, DISH2);
     }
 
     @Test
     public void testDelete() throws Exception {
-        mockMvc.perform(delete(REST_URL + DISH1.getId()));
+        mockMvc.perform(delete(REST_URL + DISH1.getId())
+                .with(authUser(ADMIN1)));
         assertMatch(dishService.getAll(), DISH5, DISH6, DISH4, DISH7, DISH3, DISH8, DISH2);
     }
 
@@ -82,7 +91,8 @@ public class AdminDishControllerTest extends AbstractControllerTest {
         Dish duplicate = new Dish(DISH8.getName(), "Duplicate");
         mockMvc.perform(post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtils.wrightValue(duplicate)))
+                .content(JsonUtils.wrightValue(duplicate))
+                .with(authUser(ADMIN1)))
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.type").value("DATA_ERROR"))
                 .andExpect(jsonPath("$.details").value("Dish with this name already exists"));

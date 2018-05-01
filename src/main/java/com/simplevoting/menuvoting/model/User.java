@@ -1,6 +1,7 @@
 package com.simplevoting.menuvoting.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.util.CollectionUtils;
 
@@ -32,6 +33,7 @@ public class User extends AbstractBaseEntity {
     @Column(name = "password", nullable = false)
     @NotBlank
     @Size(min = 5, max = 128)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Column(name = "registered", columnDefinition = "timestamp default now()")

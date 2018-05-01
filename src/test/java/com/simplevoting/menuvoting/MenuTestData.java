@@ -24,6 +24,10 @@ public class MenuTestData {
     public static final Menu MENU6 = new Menu(START_SEQ + 11, LocalDate.of(2017, 11, 2), RESTAURANT3, Collections.emptySet());
 
     static {
+        fillSets();
+    }
+
+    public static void fillSets() {
         MENU1.getDishes().add(MENU_DISH5);
         MENU1.getDishes().add(MENU_DISH6);
         MENU2.getDishes().add(MENU_DISH1);

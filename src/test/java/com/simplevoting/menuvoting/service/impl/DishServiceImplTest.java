@@ -11,7 +11,7 @@ import java.util.List;
 
 import static com.simplevoting.menuvoting.DishTestData.*;
 
-public class DishServiceImplTest extends AbstractServiceTest {
+public class DishServiceImplTest extends AbstractWebAppTest {
     @Autowired
     private DishService service;
 

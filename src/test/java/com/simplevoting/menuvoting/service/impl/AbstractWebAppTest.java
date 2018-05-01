@@ -27,8 +27,10 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 @ContextConfiguration(classes = {WebConfig.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:data.sql", config = @SqlConfig(encoding = "UTF-8"))
-abstract public class AbstractServiceTest {
+@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD,
+        scripts = "classpath:data.sql",
+        config = @SqlConfig(encoding = "UTF-8"))
+abstract public class AbstractWebAppTest {
     @ClassRule
     public static ExternalResource summary = TimingRules.SUMMARY;
 

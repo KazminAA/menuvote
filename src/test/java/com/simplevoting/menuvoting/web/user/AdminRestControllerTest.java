@@ -1,6 +1,7 @@
 package com.simplevoting.menuvoting.web.user;
 
 import com.simplevoting.menuvoting.TestUtils;
+import com.simplevoting.menuvoting.UserTestData;
 import com.simplevoting.menuvoting.model.Role;
 import com.simplevoting.menuvoting.model.User;
 import com.simplevoting.menuvoting.service.UserService;
@@ -18,6 +19,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Locale;
 
+import static com.simplevoting.menuvoting.TestUtils.authUser;
 import static com.simplevoting.menuvoting.TestUtils.contentJsonWithIgnore;
 import static com.simplevoting.menuvoting.UserTestData.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -36,7 +38,8 @@ public class AdminRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGet() throws Exception {
-        mockMvc.perform(get(REST_URL + ADMIN1.getId()))
+        mockMvc.perform(get(REST_URL + ADMIN1.getId())
+                .with(authUser(ADMIN1)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 // https://jira.spring.io/browse/SPR-14472
@@ -46,14 +49,16 @@ public class AdminRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGetNotFound() throws Exception {
-        mockMvc.perform(get(REST_URL + 1))
+        mockMvc.perform(get(REST_URL + 1)
+                .with(authUser(ADMIN1)))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
     }
 
     @Test
     public void testGetByEmail() throws Exception {
-        mockMvc.perform(get(REST_URL + "by?email=" + ADMIN1.getEmail()))
+        mockMvc.perform(get(REST_URL + "by?email=" + ADMIN1.getEmail())
+                .with(authUser(ADMIN1)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(contentJsonWithIgnore(ADMIN1, "votes"));
@@ -61,7 +66,8 @@ public class AdminRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testDelete() throws Exception {
-        mockMvc.perform(delete(REST_URL + USER1.getId()))
+        mockMvc.perform(delete(REST_URL + USER1.getId())
+                .with(authUser(ADMIN1)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
         assertMatch(userService.getAll(), ADMIN1, USER2);
@@ -69,7 +75,8 @@ public class AdminRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testDeleteNotFound() throws Exception {
-        mockMvc.perform(delete(REST_URL + 1))
+        mockMvc.perform(delete(REST_URL + 1)
+                .with(authUser(ADMIN1)))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
     }
@@ -82,7 +89,8 @@ public class AdminRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGetForbidden() throws Exception {
-        mockMvc.perform(get(REST_URL))
+        mockMvc.perform(get(REST_URL)
+                .with(authUser(USER1)))
                 .andExpect(status().isForbidden());
     }
 
@@ -93,7 +101,8 @@ public class AdminRestControllerTest extends AbstractControllerTest {
         updated.setRoles(Collections.singletonList(Role.ROLE_ADMIN));
         mockMvc.perform(put(REST_URL + USER1.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtils.wrightValue(updated)))
+                .content(jsonWithPassword(updated, updated.getPassword()))
+                .with(authUser(ADMIN1)))
                 .andExpect(status().isNoContent());
 
         assertMatch(userService.get(USER1.getId()), updated);
@@ -104,7 +113,8 @@ public class AdminRestControllerTest extends AbstractControllerTest {
         User expected = new User(null, "New", "new@gmail.com", "newPass", Role.ROLE_USER, Role.ROLE_ADMIN);
         ResultActions action = mockMvc.perform(post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtils.wrightValue(expected)))
+                .content(jsonWithPassword(expected, expected.getPassword()))
+                .with(authUser(ADMIN1)))
                 .andExpect(status().isCreated());
 
         User returned = TestUtils.readFromJson(action, User.class);
@@ -116,7 +126,8 @@ public class AdminRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGetAll() throws Exception {
-        mockMvc.perform(get(REST_URL))
+        mockMvc.perform(get(REST_URL)
+                .with(authUser(ADMIN1)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(contentJsonWithIgnore(Arrays.asList(new User[]{ADMIN1, USER1, USER2}), "votes"));
@@ -127,7 +138,8 @@ public class AdminRestControllerTest extends AbstractControllerTest {
         User expected = new User(null, null, "", "newPass", Role.ROLE_USER, Role.ROLE_ADMIN);
         ResultActions action = mockMvc.perform(post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtils.wrightValue(expected)))
+                .content(JsonUtils.wrightValue(expected))
+                .with(authUser(ADMIN1)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.type").value("VALIDATION_ERROR"));
     }
@@ -138,7 +150,8 @@ public class AdminRestControllerTest extends AbstractControllerTest {
         updated.setName("");
         mockMvc.perform(put(REST_URL + USER1.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtils.wrightValue(updated)))
+                .content(JsonUtils.wrightValue(updated))
+                .with(authUser(ADMIN1)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.type").value("VALIDATION_ERROR"))
                 .andDo(print());
@@ -151,7 +164,8 @@ public class AdminRestControllerTest extends AbstractControllerTest {
         updated.setEmail("admin@gmail.com");
         mockMvc.perform(put(REST_URL + USER1.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtils.wrightValue(updated)))
+                .content(jsonWithPassword(updated, updated.getPassword()))
+                .with(authUser(ADMIN1)))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.type").value("DATA_ERROR"))
                 .andExpect(jsonPath("$.details").value(messageUtil.getMessage("exception.user.duplicateEmail", new Locale("en"))))
@@ -164,7 +178,8 @@ public class AdminRestControllerTest extends AbstractControllerTest {
         User expected = new User(null, "New", "user@yandex.ru", "newPass", Role.ROLE_USER, Role.ROLE_ADMIN);
         mockMvc.perform(post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtils.wrightValue(expected)))
+                .content(jsonWithPassword(expected, expected.getPassword()))
+                .with(authUser(ADMIN1)))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.type").value("DATA_ERROR"))
                 .andExpect(jsonPath("$.details").value(messageUtil.getMessage("exception.user.duplicateEmail", new Locale("en"))));

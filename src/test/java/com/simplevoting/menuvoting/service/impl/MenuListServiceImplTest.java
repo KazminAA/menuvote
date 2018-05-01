@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 import static com.simplevoting.menuvoting.MenuDishTestData.*;
 
-public class MenuListServiceImplTest extends AbstractServiceTest {
+public class MenuListServiceImplTest extends AbstractWebAppTest {
 
     @Test
     public void addDish() {
