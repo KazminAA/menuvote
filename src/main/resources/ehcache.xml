@@ -2,7 +2,7 @@
          xsi:noNamespaceSchemaLocation="ehcache.xsd" updateCheck="true"
          monitoring="autodetect" dynamicConfig="true">
 
-    <defaultCache maxEntriesLocalHeap="10000"
+    <defaultCache maxEntriesLocalHeap="800"
                   maxEntriesLocalDisk="1000"
                   eternal="false"
                   diskSpoolBufferSizeMB="20"
